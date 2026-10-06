@@ -53,6 +53,7 @@
 
 #define PMON 5
 #define EEAddr    0x7000
+#define TALA 3
 
 
 /*
@@ -63,14 +64,11 @@
 void main(void)
 {    
     unsigned char c;
-    unsigned char temperature_max;
-    unsigned char temperature_min;
     char buf[17];
     uint8_t bright;
-    uint8_t bright_max;
-    uint8_t bright_min;
     unsigned char pmon = 0;
-    char eeprom_start = 0;
+    bool eeprom_first = false;
+    uint8_t ALAF = 0;
 
     // initialize the device
     SYSTEM_Initialize();
@@ -110,10 +108,22 @@ void main(void)
             
             pmon++;
             
+            if (eeprom_first){
+                if (ALAF == 1){
+                    unsigned char alarm_type = alarm(c, bright);
+                    if (alarm_type != 0){
+                        /*Imprimir notificação de alarme (até interação user)
+                         Gerar um pulso PWM num LED ou botão (duração de TALA)*/
+                    }
+                }
+            }
             if (pmon >= PMON){
                 c = readTC74();
                 bright = brightness();
                 eeprom_record(EEAddr, c, bright);
+                eeprom_first = true;
+                
+                //Esta parte do LCD não foi vista ainda ao pormenor
                 LCDcmd(0x80);       //first line, first column
                 while (LCDbusy());
                 LCDstr("Temp");
