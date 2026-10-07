@@ -1,0 +1,76 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"6 Clock/clock.c
+[; ;Clock/clock.c: 6: volatile uint8_t clk_h = 0, clk_m = 0, clk_s = 0;
+[v _clk_h `Vuc ~T0 @X0 1 e ]
+[i _clk_h
+-> -> 0 `i `uc
+]
+[v _clk_m `Vuc ~T0 @X0 1 e ]
+[i _clk_m
+-> -> 0 `i `uc
+]
+[v _clk_s `Vuc ~T0 @X0 1 e ]
+[i _clk_s
+-> -> 0 `i `uc
+]
+"7
+[; ;Clock/clock.c: 7: volatile _Bool tick_1s = 0;
+[v _tick_1s `Va ~T0 @X0 1 e ]
+[i _tick_1s
+-> -> 0 `i `a
+]
+"9
+[; ;Clock/clock.c: 9:     void clock_isr(void) {
+[v _clock_isr `(v ~T0 @X0 1 ef ]
+{
+[e :U _clock_isr ]
+[f ]
+"10
+[; ;Clock/clock.c: 10:         clk_s++;
+[e ++ _clk_s -> -> 1 `i `Vuc ]
+"11
+[; ;Clock/clock.c: 11:         if (clk_s >= 60) {
+[e $ ! >= -> _clk_s `i -> 60 `i 2  ]
+{
+"12
+[; ;Clock/clock.c: 12:             clk_s = 0;
+[e = _clk_s -> -> 0 `i `uc ]
+"13
+[; ;Clock/clock.c: 13:             clk_m++;
+[e ++ _clk_m -> -> 1 `i `Vuc ]
+"14
+[; ;Clock/clock.c: 14:             if (clk_m >= 60) {
+[e $ ! >= -> _clk_m `i -> 60 `i 3  ]
+{
+"15
+[; ;Clock/clock.c: 15:                 clk_m = 0;
+[e = _clk_m -> -> 0 `i `uc ]
+"16
+[; ;Clock/clock.c: 16:                 clk_h++;
+[e ++ _clk_h -> -> 1 `i `Vuc ]
+"17
+[; ;Clock/clock.c: 17:                 if (clk_h >= 24) {
+[e $ ! >= -> _clk_h `i -> 24 `i 4  ]
+{
+"18
+[; ;Clock/clock.c: 18:                     clk_h = 0;
+[e = _clk_h -> -> 0 `i `uc ]
+"19
+[; ;Clock/clock.c: 19:                 }
+}
+[e :U 4 ]
+"20
+[; ;Clock/clock.c: 20:             }
+}
+[e :U 3 ]
+"21
+[; ;Clock/clock.c: 21:         }
+}
+[e :U 2 ]
+"22
+[; ;Clock/clock.c: 22:         tick_1s = 1;
+[e = _tick_1s -> -> 1 `i `a ]
+"23
+[; ;Clock/clock.c: 23:     }
+[e :UE 1 ]
+}

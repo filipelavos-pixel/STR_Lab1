@@ -1,2 +1,2 @@
 dist/default/production\__eeprom.p1: \
-  D:/MPLABx/compiler/pic/sources/c99/pic/__eeprom.c
+  D:/STR/pic/sources/c99/pic/__eeprom.c

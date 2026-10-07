@@ -47,8 +47,10 @@
 #include "Clock/clock.h"
 #include "Sensors/sensors.h"
 #include "EEPROM/eeprom.h"
+#include "Alarms/alarms.h"
 #include "stdio.h"
 #include "stdbool.h"
+#include "stdint.h"
 
 
 #define PMON 5

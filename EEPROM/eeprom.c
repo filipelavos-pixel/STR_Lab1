@@ -1,6 +1,7 @@
-#include "mcc_generated_files/memory.h"
-#include "Clock/clock.h"
-#include "EEPROM/eeprom.h"
+#include "../mcc_generated_files/memory.h"
+#include "../Clock/clock.h"
+#include "eeprom.h"
+#include "stdint.h"
 
 unsigned char temperature_max;
 unsigned char temperature_min;
@@ -8,7 +9,7 @@ uint8_t bright_max;
 uint8_t bright_min;
 char eeprom_start = 0;
 
-void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright) {
+void eeprom_record(uint16_t EEAddr, unsigned char c, uint8_t bright) {
     
     if (eeprom_start == 0){
         eeprom_start = 1;

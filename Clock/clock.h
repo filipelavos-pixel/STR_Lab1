@@ -11,6 +11,10 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+#include "stdint.h"
+#include "stdbool.h"
+
 
 extern volatile uint8_t clk_h;
 extern volatile uint8_t clk_m;

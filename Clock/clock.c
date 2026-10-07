@@ -1,6 +1,7 @@
 
-#include "Clock/clock.h"
+#include "clock.h"
 #include "stdbool.h"
+#include "stdint.h"
 
 volatile uint8_t clk_h = 0, clk_m = 0, clk_s = 0;
 volatile bool tick_1s = false;

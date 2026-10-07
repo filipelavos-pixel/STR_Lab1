@@ -1,6 +1,7 @@
 
-#include "Alarms/alarms.h"
-#include "Clock/clock.h"
+#include "alarms.h"
+#include "../Clock/clock.h"
+#include "stdint.h"
 
 uint8_t ALAH = 12, ALAM = 0, ALAS = 0;
 unsigned char ALAT = 25;

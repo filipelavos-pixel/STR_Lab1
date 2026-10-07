@@ -21047,34 +21047,6 @@ void I2C1_SetDataNackCallback(i2c1_callback_t cb, void *ptr);
 # 204 "./mcc_generated_files/i2c1_master.h"
 void I2C1_SetTimeoutCallback(i2c1_callback_t cb, void *ptr);
 # 57 "./mcc_generated_files/mcc.h" 2
-# 1 "./mcc_generated_files/tmr1.h" 1
-# 101 "./mcc_generated_files/tmr1.h"
-void TMR1_Initialize(void);
-# 130 "./mcc_generated_files/tmr1.h"
-void TMR1_StartTimer(void);
-# 162 "./mcc_generated_files/tmr1.h"
-void TMR1_StopTimer(void);
-# 197 "./mcc_generated_files/tmr1.h"
-uint16_t TMR1_ReadTimer(void);
-# 236 "./mcc_generated_files/tmr1.h"
-void TMR1_WriteTimer(uint16_t timerVal);
-# 272 "./mcc_generated_files/tmr1.h"
-void TMR1_Reload(void);
-# 311 "./mcc_generated_files/tmr1.h"
-void TMR1_StartSinglePulseAcquisition(void);
-# 350 "./mcc_generated_files/tmr1.h"
-uint8_t TMR1_CheckGateValueStatus(void);
-# 368 "./mcc_generated_files/tmr1.h"
-void TMR1_ISR(void);
-# 385 "./mcc_generated_files/tmr1.h"
-void TMR1_CallBack(void);
-# 403 "./mcc_generated_files/tmr1.h"
- void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-# 421 "./mcc_generated_files/tmr1.h"
-extern void (*TMR1_InterruptHandler)(void);
-# 439 "./mcc_generated_files/tmr1.h"
-void TMR1_DefaultInterruptHandler(void);
-# 58 "./mcc_generated_files/mcc.h" 2
 # 1 "./mcc_generated_files/adcc.h" 1
 # 72 "./mcc_generated_files/adcc.h"
 typedef uint16_t adc_result_t;
@@ -21141,12 +21113,54 @@ _Bool ADCC_HasErrorCrossedUpperThreshold(void);
 _Bool ADCC_HasErrorCrossedLowerThreshold(void);
 # 824 "./mcc_generated_files/adcc.h"
 uint8_t ADCC_GetConversionStageStatus(void);
+# 58 "./mcc_generated_files/mcc.h" 2
+# 1 "./mcc_generated_files/memory.h" 1
+# 99 "./mcc_generated_files/memory.h"
+uint16_t FLASH_ReadWord(uint16_t flashAddr);
+# 128 "./mcc_generated_files/memory.h"
+void FLASH_WriteWord(uint16_t flashAddr, uint16_t *ramBuf, uint16_t word);
+# 164 "./mcc_generated_files/memory.h"
+int8_t FLASH_WriteBlock(uint16_t writeAddr, uint16_t *flashWordArray);
+# 189 "./mcc_generated_files/memory.h"
+void FLASH_EraseBlock(uint16_t startAddr);
+# 222 "./mcc_generated_files/memory.h"
+void DATAEE_WriteByte(uint16_t bAdd, uint8_t bData);
+# 248 "./mcc_generated_files/memory.h"
+uint8_t DATAEE_ReadByte(uint16_t bAdd);
 # 59 "./mcc_generated_files/mcc.h" 2
-# 73 "./mcc_generated_files/mcc.h"
+# 1 "./mcc_generated_files/tmr1.h" 1
+# 101 "./mcc_generated_files/tmr1.h"
+void TMR1_Initialize(void);
+# 130 "./mcc_generated_files/tmr1.h"
+void TMR1_StartTimer(void);
+# 162 "./mcc_generated_files/tmr1.h"
+void TMR1_StopTimer(void);
+# 197 "./mcc_generated_files/tmr1.h"
+uint16_t TMR1_ReadTimer(void);
+# 236 "./mcc_generated_files/tmr1.h"
+void TMR1_WriteTimer(uint16_t timerVal);
+# 272 "./mcc_generated_files/tmr1.h"
+void TMR1_Reload(void);
+# 311 "./mcc_generated_files/tmr1.h"
+void TMR1_StartSinglePulseAcquisition(void);
+# 350 "./mcc_generated_files/tmr1.h"
+uint8_t TMR1_CheckGateValueStatus(void);
+# 368 "./mcc_generated_files/tmr1.h"
+void TMR1_ISR(void);
+# 385 "./mcc_generated_files/tmr1.h"
+void TMR1_CallBack(void);
+# 403 "./mcc_generated_files/tmr1.h"
+ void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
+# 421 "./mcc_generated_files/tmr1.h"
+extern void (*TMR1_InterruptHandler)(void);
+# 439 "./mcc_generated_files/tmr1.h"
+void TMR1_DefaultInterruptHandler(void);
+# 60 "./mcc_generated_files/mcc.h" 2
+# 74 "./mcc_generated_files/mcc.h"
 void SYSTEM_Initialize(void);
-# 86 "./mcc_generated_files/mcc.h"
+# 87 "./mcc_generated_files/mcc.h"
 void OSCILLATOR_Initialize(void);
-# 99 "./mcc_generated_files/mcc.h"
+# 100 "./mcc_generated_files/mcc.h"
 void PMD_Initialize(void);
 # 45 "main.c" 2
 # 1 "./I2C/i2c.h" 1
@@ -21180,7 +21194,7 @@ int LCDbusy(void);
 void LCDpos(unsigned char l, unsigned char c);
 # 47 "main.c" 2
 # 1 "./Clock/clock.h" 1
-# 15 "./Clock/clock.h"
+# 19 "./Clock/clock.h"
 extern volatile uint8_t clk_h;
 extern volatile uint8_t clk_m;
 extern volatile uint8_t clk_s;
@@ -21189,20 +21203,44 @@ extern volatile _Bool tick_1s;
 void clock_isr(void);
 # 48 "main.c" 2
 # 1 "./Sensors/sensors.h" 1
-# 15 "./Sensors/sensors.h"
+# 17 "./Sensors/sensors.h"
 unsigned char readTC74 (void);
-uint16_t brightness(void);
+uint8_t brightness(void);
 # 49 "main.c" 2
-# 61 "main.c"
+# 1 "./EEPROM/eeprom.h" 1
+# 17 "./EEPROM/eeprom.h"
+extern unsigned char temperature_max;
+extern unsigned char temperature_min;
+extern uint8_t bright_max;
+extern uint8_t bright_min;
+extern char eeprom_start;
+
+
+void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright);
+# 50 "main.c" 2
+# 1 "./Alarms/alarms.h" 1
+# 17 "./Alarms/alarms.h"
+extern uint8_t ALAH;
+extern uint8_t ALAM;
+extern uint8_t ALAS;
+extern unsigned char ALAT;
+extern uint8_t ALAL;
+
+unsigned char alarm(unsigned char c, uint8_t bright);
+# 51 "main.c" 2
+# 66 "main.c"
 void main(void)
 {
     unsigned char c;
     char buf[17];
+    uint8_t bright;
     unsigned char pmon = 0;
+    _Bool eeprom_first = 0;
+    uint8_t ALAF = 0;
 
 
     SYSTEM_Initialize();
-# 86 "main.c"
+# 94 "main.c"
     OpenI2C();
 
 
@@ -21222,8 +21260,22 @@ void main(void)
 
             pmon++;
 
+            if (eeprom_first){
+                if (ALAF == 1){
+                    unsigned char alarm_type = alarm(c, bright);
+                    if (alarm_type != 0){
+
+
+                    }
+                }
+            }
             if (pmon >= 5){
                 c = readTC74();
+                bright = brightness();
+                eeprom_record(0x7000, c, bright);
+                eeprom_first = 1;
+
+
                 LCDcmd(0x80);
                 while (LCDbusy());
                 LCDstr("Temp");
@@ -21234,6 +21286,7 @@ void main(void)
                 sprintf(buf, "%02d C", c);
                 while (LCDbusy());
                 LCDstr(buf);
+                pmon = 0;
         }
             }
 

@@ -1,0 +1,272 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"222 EEPROM/../mcc_generated_files/memory.h
+[; ;EEPROM/../mcc_generated_files/memory.h: 222: void DATAEE_WriteByte(uint16_t bAdd, uint8_t bData);
+[v _DATAEE_WriteByte `(v ~T0 @X0 0 ef2`us`uc ]
+"19 EEPROM/../Clock/clock.h
+[; ;EEPROM/../Clock/clock.h: 19: extern volatile uint8_t clk_h;
+[v _clk_h `Vuc ~T0 @X0 0 e ]
+"20
+[; ;EEPROM/../Clock/clock.h: 20: extern volatile uint8_t clk_m;
+[v _clk_m `Vuc ~T0 @X0 0 e ]
+"21
+[; ;EEPROM/../Clock/clock.h: 21: extern volatile uint8_t clk_s;
+[v _clk_s `Vuc ~T0 @X0 0 e ]
+"6 EEPROM/eeprom.c
+[; ;EEPROM/eeprom.c: 6: unsigned char temperature_max;
+[v _temperature_max `uc ~T0 @X0 1 e ]
+"7
+[; ;EEPROM/eeprom.c: 7: unsigned char temperature_min;
+[v _temperature_min `uc ~T0 @X0 1 e ]
+"8
+[; ;EEPROM/eeprom.c: 8: uint8_t bright_max;
+[v _bright_max `uc ~T0 @X0 1 e ]
+"9
+[; ;EEPROM/eeprom.c: 9: uint8_t bright_min;
+[v _bright_min `uc ~T0 @X0 1 e ]
+"10
+[; ;EEPROM/eeprom.c: 10: char eeprom_start = 0;
+[v _eeprom_start `uc ~T0 @X0 1 e ]
+[i _eeprom_start
+-> -> 0 `i `uc
+]
+"12
+[; ;EEPROM/eeprom.c: 12: void eeprom_record(uint16_t EEAddr, unsigned char c, uint8_t bright) {
+[v _eeprom_record `(v ~T0 @X0 1 ef3`us`uc`uc ]
+{
+[e :U _eeprom_record ]
+[v _EEAddr `us ~T0 @X0 1 r1 ]
+[v _c `uc ~T0 @X0 1 r2 ]
+[v _bright `uc ~T0 @X0 1 r3 ]
+[f ]
+"14
+[; ;EEPROM/eeprom.c: 14:     if (eeprom_start == 0){
+[e $ ! == -> _eeprom_start `i -> 0 `i 2  ]
+{
+"15
+[; ;EEPROM/eeprom.c: 15:         eeprom_start = 1;
+[e = _eeprom_start -> -> 1 `i `uc ]
+"16
+[; ;EEPROM/eeprom.c: 16:         temperature_max = c;
+[e = _temperature_max _c ]
+"17
+[; ;EEPROM/eeprom.c: 17:         temperature_min = c;
+[e = _temperature_min _c ]
+"18
+[; ;EEPROM/eeprom.c: 18:         bright_max = bright;
+[e = _bright_max _bright ]
+"19
+[; ;EEPROM/eeprom.c: 19:         bright_min = bright;
+[e = _bright_min _bright ]
+"20
+[; ;EEPROM/eeprom.c: 20:         for (int i=0; i<20; i=i+5){
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 0 `i ]
+[e $ < _i -> 20 `i 3  ]
+[e $U 4  ]
+[e :U 3 ]
+{
+"21
+[; ;EEPROM/eeprom.c: 21:             DATAEE_WriteByte(EEAddr + i, clk_h);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> _i `ui `us _clk_h ]
+"22
+[; ;EEPROM/eeprom.c: 22:         }
+}
+[e = _i + _i -> 5 `i ]
+[e $ < _i -> 20 `i 3  ]
+[e :U 4 ]
+}
+"23
+[; ;EEPROM/eeprom.c: 23:         for (int i=1; i<20; i=i+5){
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 1 `i ]
+[e $ < _i -> 20 `i 6  ]
+[e $U 7  ]
+[e :U 6 ]
+{
+"24
+[; ;EEPROM/eeprom.c: 24:             DATAEE_WriteByte(EEAddr + i, clk_m);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> _i `ui `us _clk_m ]
+"25
+[; ;EEPROM/eeprom.c: 25:         }
+}
+[e = _i + _i -> 5 `i ]
+[e $ < _i -> 20 `i 6  ]
+[e :U 7 ]
+}
+"26
+[; ;EEPROM/eeprom.c: 26:         for (int i=2; i<20; i=i+5){
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 2 `i ]
+[e $ < _i -> 20 `i 9  ]
+[e $U 10  ]
+[e :U 9 ]
+{
+"27
+[; ;EEPROM/eeprom.c: 27:             DATAEE_WriteByte(EEAddr + i, clk_s);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> _i `ui `us _clk_s ]
+"28
+[; ;EEPROM/eeprom.c: 28:         }
+}
+[e = _i + _i -> 5 `i ]
+[e $ < _i -> 20 `i 9  ]
+[e :U 10 ]
+}
+"29
+[; ;EEPROM/eeprom.c: 29:         for (int i=3; i<20; i=i+5){
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 3 `i ]
+[e $ < _i -> 20 `i 12  ]
+[e $U 13  ]
+[e :U 12 ]
+{
+"30
+[; ;EEPROM/eeprom.c: 30:             DATAEE_WriteByte(EEAddr + i, c);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> _i `ui `us _c ]
+"31
+[; ;EEPROM/eeprom.c: 31:         }
+}
+[e = _i + _i -> 5 `i ]
+[e $ < _i -> 20 `i 12  ]
+[e :U 13 ]
+}
+"32
+[; ;EEPROM/eeprom.c: 32:         for (int i=4; i<20; i=i+5){
+{
+[v _i `i ~T0 @X0 1 a ]
+[e = _i -> 4 `i ]
+[e $ < _i -> 20 `i 15  ]
+[e $U 16  ]
+[e :U 15 ]
+{
+"33
+[; ;EEPROM/eeprom.c: 33:             DATAEE_WriteByte(EEAddr + i, bright);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> _i `ui `us _bright ]
+"34
+[; ;EEPROM/eeprom.c: 34:         }
+}
+[e = _i + _i -> 5 `i ]
+[e $ < _i -> 20 `i 15  ]
+[e :U 16 ]
+}
+"35
+[; ;EEPROM/eeprom.c: 35:     }else{
+}
+[e $U 18  ]
+[e :U 2 ]
+{
+"36
+[; ;EEPROM/eeprom.c: 36:         if (c > temperature_max){
+[e $ ! > -> _c `i -> _temperature_max `i 19  ]
+{
+"37
+[; ;EEPROM/eeprom.c: 37:             temperature_max = c;
+[e = _temperature_max _c ]
+"38
+[; ;EEPROM/eeprom.c: 38:             DATAEE_WriteByte(EEAddr, clk_h);
+[e ( _DATAEE_WriteByte (2 , _EEAddr _clk_h ]
+"39
+[; ;EEPROM/eeprom.c: 39:             DATAEE_WriteByte(EEAddr + 1, clk_m);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 1 `i `ui `us _clk_m ]
+"40
+[; ;EEPROM/eeprom.c: 40:             DATAEE_WriteByte(EEAddr + 2, clk_s);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 2 `i `ui `us _clk_s ]
+"41
+[; ;EEPROM/eeprom.c: 41:             DATAEE_WriteByte(EEAddr + 3, c);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 3 `i `ui `us _c ]
+"42
+[; ;EEPROM/eeprom.c: 42:             DATAEE_WriteByte(EEAddr + 4, bright);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 4 `i `ui `us _bright ]
+"43
+[; ;EEPROM/eeprom.c: 43:         }
+}
+[e :U 19 ]
+"44
+[; ;EEPROM/eeprom.c: 44:         if (c < temperature_min){
+[e $ ! < -> _c `i -> _temperature_min `i 20  ]
+{
+"45
+[; ;EEPROM/eeprom.c: 45:             temperature_min = c;
+[e = _temperature_min _c ]
+"46
+[; ;EEPROM/eeprom.c: 46:             DATAEE_WriteByte(EEAddr + 5, clk_h);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 5 `i `ui `us _clk_h ]
+"47
+[; ;EEPROM/eeprom.c: 47:             DATAEE_WriteByte(EEAddr + 6, clk_m);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 6 `i `ui `us _clk_m ]
+"48
+[; ;EEPROM/eeprom.c: 48:             DATAEE_WriteByte(EEAddr + 7, clk_s);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 7 `i `ui `us _clk_s ]
+"49
+[; ;EEPROM/eeprom.c: 49:             DATAEE_WriteByte(EEAddr + 8, c);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 8 `i `ui `us _c ]
+"50
+[; ;EEPROM/eeprom.c: 50:             DATAEE_WriteByte(EEAddr + 9, bright);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 9 `i `ui `us _bright ]
+"51
+[; ;EEPROM/eeprom.c: 51:         }
+}
+[e :U 20 ]
+"52
+[; ;EEPROM/eeprom.c: 52:         if (bright > bright_max){
+[e $ ! > -> _bright `i -> _bright_max `i 21  ]
+{
+"53
+[; ;EEPROM/eeprom.c: 53:             bright_max = bright;
+[e = _bright_max _bright ]
+"54
+[; ;EEPROM/eeprom.c: 54:             DATAEE_WriteByte(EEAddr + 10, clk_h);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 10 `i `ui `us _clk_h ]
+"55
+[; ;EEPROM/eeprom.c: 55:             DATAEE_WriteByte(EEAddr + 11, clk_m);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 11 `i `ui `us _clk_m ]
+"56
+[; ;EEPROM/eeprom.c: 56:             DATAEE_WriteByte(EEAddr + 12, clk_s);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 12 `i `ui `us _clk_s ]
+"57
+[; ;EEPROM/eeprom.c: 57:             DATAEE_WriteByte(EEAddr + 13, c);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 13 `i `ui `us _c ]
+"58
+[; ;EEPROM/eeprom.c: 58:             DATAEE_WriteByte(EEAddr + 14, bright);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 14 `i `ui `us _bright ]
+"59
+[; ;EEPROM/eeprom.c: 59:         }
+}
+[e :U 21 ]
+"60
+[; ;EEPROM/eeprom.c: 60:         if (bright < bright_min){
+[e $ ! < -> _bright `i -> _bright_min `i 22  ]
+{
+"61
+[; ;EEPROM/eeprom.c: 61:             bright_min = bright;
+[e = _bright_min _bright ]
+"62
+[; ;EEPROM/eeprom.c: 62:             DATAEE_WriteByte(EEAddr + 15, clk_h);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 15 `i `ui `us _clk_h ]
+"63
+[; ;EEPROM/eeprom.c: 63:             DATAEE_WriteByte(EEAddr + 16, clk_m);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 16 `i `ui `us _clk_m ]
+"64
+[; ;EEPROM/eeprom.c: 64:             DATAEE_WriteByte(EEAddr + 17, clk_s);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 17 `i `ui `us _clk_s ]
+"65
+[; ;EEPROM/eeprom.c: 65:             DATAEE_WriteByte(EEAddr + 18, c);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 18 `i `ui `us _c ]
+"66
+[; ;EEPROM/eeprom.c: 66:             DATAEE_WriteByte(EEAddr + 19, bright);
+[e ( _DATAEE_WriteByte (2 , -> + -> _EEAddr `ui -> -> 19 `i `ui `us _bright ]
+"67
+[; ;EEPROM/eeprom.c: 67:         }
+}
+[e :U 22 ]
+"68
+[; ;EEPROM/eeprom.c: 68:     }
+}
+[e :U 18 ]
+"70
+[; ;EEPROM/eeprom.c: 70: }
+[e :UE 1 ]
+}

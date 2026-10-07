@@ -1,8 +1,9 @@
 
-#include "I2C/i2c.h"
-#include "Clock/clock.h"
-#include "Sensors/sensors.h"
-#include "mcc_generated_files/adcc.h"
+#include "../I2C/i2c.h"
+#include "../Clock/clock.h"
+#include "sensors.h"
+#include "../mcc_generated_files/adcc.h"
+#include "stdint.h"
 
 unsigned char readTC74 (void)
 {

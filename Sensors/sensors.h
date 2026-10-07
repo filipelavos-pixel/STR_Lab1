@@ -11,9 +11,11 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+#include "stdint.h"
 
 unsigned char readTC74 (void);
-uint16_t brightness(void);
+uint8_t brightness(void);
 
 
 #ifdef	__cplusplus

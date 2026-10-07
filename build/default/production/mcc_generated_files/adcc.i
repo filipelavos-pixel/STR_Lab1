@@ -21116,6 +21116,21 @@ void I2C1_SetDataNackCallback(i2c1_callback_t cb, void *ptr);
 # 204 "mcc_generated_files/i2c1_master.h"
 void I2C1_SetTimeoutCallback(i2c1_callback_t cb, void *ptr);
 # 57 "mcc_generated_files/mcc.h" 2
+
+# 1 "mcc_generated_files/memory.h" 1
+# 99 "mcc_generated_files/memory.h"
+uint16_t FLASH_ReadWord(uint16_t flashAddr);
+# 128 "mcc_generated_files/memory.h"
+void FLASH_WriteWord(uint16_t flashAddr, uint16_t *ramBuf, uint16_t word);
+# 164 "mcc_generated_files/memory.h"
+int8_t FLASH_WriteBlock(uint16_t writeAddr, uint16_t *flashWordArray);
+# 189 "mcc_generated_files/memory.h"
+void FLASH_EraseBlock(uint16_t startAddr);
+# 222 "mcc_generated_files/memory.h"
+void DATAEE_WriteByte(uint16_t bAdd, uint8_t bData);
+# 248 "mcc_generated_files/memory.h"
+uint8_t DATAEE_ReadByte(uint16_t bAdd);
+# 59 "mcc_generated_files/mcc.h" 2
 # 1 "mcc_generated_files/tmr1.h" 1
 # 101 "mcc_generated_files/tmr1.h"
 void TMR1_Initialize(void);
@@ -21143,12 +21158,12 @@ void TMR1_CallBack(void);
 extern void (*TMR1_InterruptHandler)(void);
 # 439 "mcc_generated_files/tmr1.h"
 void TMR1_DefaultInterruptHandler(void);
-# 58 "mcc_generated_files/mcc.h" 2
-# 73 "mcc_generated_files/mcc.h"
+# 60 "mcc_generated_files/mcc.h" 2
+# 74 "mcc_generated_files/mcc.h"
 void SYSTEM_Initialize(void);
-# 86 "mcc_generated_files/mcc.h"
+# 87 "mcc_generated_files/mcc.h"
 void OSCILLATOR_Initialize(void);
-# 99 "mcc_generated_files/mcc.h"
+# 100 "mcc_generated_files/mcc.h"
 void PMD_Initialize(void);
 # 54 "mcc_generated_files/adcc.c" 2
 # 63 "mcc_generated_files/adcc.c"

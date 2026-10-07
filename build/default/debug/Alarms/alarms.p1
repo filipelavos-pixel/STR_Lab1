@@ -1,0 +1,104 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"19 Alarms/../Clock/clock.h
+[; ;Alarms/../Clock/clock.h: 19: extern volatile uint8_t clk_h;
+[v _clk_h `Vuc ~T0 @X0 0 e ]
+"20
+[; ;Alarms/../Clock/clock.h: 20: extern volatile uint8_t clk_m;
+[v _clk_m `Vuc ~T0 @X0 0 e ]
+"21
+[; ;Alarms/../Clock/clock.h: 21: extern volatile uint8_t clk_s;
+[v _clk_s `Vuc ~T0 @X0 0 e ]
+"6 Alarms/alarms.c
+[; ;Alarms/alarms.c: 6: uint8_t ALAH = 12, ALAM = 0, ALAS = 0;
+[v _ALAH `uc ~T0 @X0 1 e ]
+[i _ALAH
+-> -> 12 `i `uc
+]
+[v _ALAM `uc ~T0 @X0 1 e ]
+[i _ALAM
+-> -> 0 `i `uc
+]
+[v _ALAS `uc ~T0 @X0 1 e ]
+[i _ALAS
+-> -> 0 `i `uc
+]
+"7
+[; ;Alarms/alarms.c: 7: unsigned char ALAT = 25;
+[v _ALAT `uc ~T0 @X0 1 e ]
+[i _ALAT
+-> -> 25 `i `uc
+]
+"8
+[; ;Alarms/alarms.c: 8: uint8_t ALAL = 3;
+[v _ALAL `uc ~T0 @X0 1 e ]
+[i _ALAL
+-> -> 3 `i `uc
+]
+"10
+[; ;Alarms/alarms.c: 10: unsigned char alarm(unsigned char c, uint8_t bright){
+[v _alarm `(uc ~T0 @X0 1 ef2`uc`uc ]
+{
+[e :U _alarm ]
+[v _c `uc ~T0 @X0 1 r1 ]
+[v _bright `uc ~T0 @X0 1 r2 ]
+[f ]
+"12
+[; ;Alarms/alarms.c: 12:     if (clk_h >= ALAH){
+[e $ ! >= -> _clk_h `i -> _ALAH `i 2  ]
+{
+"13
+[; ;Alarms/alarms.c: 13:         if (clk_m >= ALAM){
+[e $ ! >= -> _clk_m `i -> _ALAM `i 3  ]
+{
+"14
+[; ;Alarms/alarms.c: 14:             if(clk_s >= ALAS){
+[e $ ! >= -> _clk_s `i -> _ALAS `i 4  ]
+{
+"15
+[; ;Alarms/alarms.c: 15:                 return 'C';
+[e ) -> -> 67 `ui `uc ]
+[e $UE 1  ]
+"16
+[; ;Alarms/alarms.c: 16:             }
+}
+[e :U 4 ]
+"17
+[; ;Alarms/alarms.c: 17:         }
+}
+[e :U 3 ]
+"18
+[; ;Alarms/alarms.c: 18:     }
+}
+[e :U 2 ]
+"19
+[; ;Alarms/alarms.c: 19:     if (c > ALAT){
+[e $ ! > -> _c `i -> _ALAT `i 5  ]
+{
+"20
+[; ;Alarms/alarms.c: 20:         return 'T';
+[e ) -> -> 84 `ui `uc ]
+[e $UE 1  ]
+"21
+[; ;Alarms/alarms.c: 21:     }
+}
+[e :U 5 ]
+"22
+[; ;Alarms/alarms.c: 22:     if (bright < ALAL){
+[e $ ! < -> _bright `i -> _ALAL `i 6  ]
+{
+"23
+[; ;Alarms/alarms.c: 23:         return 'L';
+[e ) -> -> 76 `ui `uc ]
+[e $UE 1  ]
+"24
+[; ;Alarms/alarms.c: 24:     }
+}
+[e :U 6 ]
+"25
+[; ;Alarms/alarms.c: 25:     return 0;
+[e ) -> -> 0 `i `uc ]
+[e $UE 1  ]
+"26
+[; ;Alarms/alarms.c: 26: }
+[e :UE 1 ]
+}

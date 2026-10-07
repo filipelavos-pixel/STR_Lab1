@@ -1,7 +1,7 @@
 Version 4.0 HI-TECH Software Intermediate Code
 [p mainexit ]
-"73 ./mcc_generated_files/mcc.h
-[; ;./mcc_generated_files/mcc.h: 73: void SYSTEM_Initialize(void);
+"74 ./mcc_generated_files/mcc.h
+[; ;./mcc_generated_files/mcc.h: 74: void SYSTEM_Initialize(void);
 [v _SYSTEM_Initialize `(v ~T0 @X0 0 ef ]
 "155 ./I2C/i2c.h
 [; ;./I2C/i2c.h: 155: void OpenI2C( void );
@@ -9,12 +9,12 @@ Version 4.0 HI-TECH Software Intermediate Code
 "18 ./LCD/lcd.h
 [; ;./LCD/lcd.h: 18: void LCDinit(void);
 [v _LCDinit `(v ~T0 @X0 0 ef ]
-[v F12625 `(v ~T0 @X0 0 tf ]
+[v F12684 `(v ~T0 @X0 0 tf ]
 "403 ./mcc_generated_files/tmr1.h
 [; ;./mcc_generated_files/tmr1.h: 403:  void TMR1_SetInterruptHandler(void (* InterruptHandler)(void));
-[v _TMR1_SetInterruptHandler `(v ~T0 @X0 0 ef1`*F12625 ]
-"20 ./Clock/clock.h
-[; ;./Clock/clock.h: 20: void clock_isr(void);
+[v _TMR1_SetInterruptHandler `(v ~T0 @X0 0 ef1`*F12684 ]
+"24 ./Clock/clock.h
+[; ;./Clock/clock.h: 24: void clock_isr(void);
 [v _clock_isr `(v ~T0 @X0 0 ef ]
 "357 D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h
 [; ;D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h: 357:     struct {
@@ -27,8 +27,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 "364
 [; ;D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h: 364: extern volatile INTCONbits_t INTCONbits __attribute__((address(0x00B)));
 [v _INTCONbits `VS30 ~T0 @X0 0 e@11 ]
-"18 ./Clock/clock.h
-[; ;./Clock/clock.h: 18: extern volatile _Bool tick_1s;
+"22 ./Clock/clock.h
+[; ;./Clock/clock.h: 22: extern volatile _Bool tick_1s;
 [v _tick_1s `Va ~T0 @X0 0 e ]
 "956 D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h
 [; ;D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h: 956:     struct {
@@ -41,9 +41,18 @@ Version 4.0 HI-TECH Software Intermediate Code
 "967
 [; ;D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h: 967: extern volatile LATAbits_t LATAbits __attribute__((address(0x016)));
 [v _LATAbits `VS52 ~T0 @X0 0 e@22 ]
-"15 ./Sensors/sensors.h
-[; ;./Sensors/sensors.h: 15: unsigned char readTC74 (void);
+"23 ./Alarms/alarms.h
+[; ;./Alarms/alarms.h: 23: unsigned char alarm(unsigned char c, uint8_t bright);
+[v _alarm `(uc ~T0 @X0 0 ef2`uc`uc ]
+"17 ./Sensors/sensors.h
+[; ;./Sensors/sensors.h: 17: unsigned char readTC74 (void);
 [v _readTC74 `(uc ~T0 @X0 0 ef ]
+"18
+[; ;./Sensors/sensors.h: 18: uint8_t brightness(void);
+[v _brightness `(uc ~T0 @X0 0 ef ]
+"24 ./EEPROM/eeprom.h
+[; ;./EEPROM/eeprom.h: 24: void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright);
+[v _eeprom_record `(v ~T0 @X0 0 ef3`us`uc`uc ]
 "20 ./LCD/lcd.h
 [; ;./LCD/lcd.h: 20: void LCDcmd(unsigned char c);
 [v _LCDcmd `(v ~T0 @X0 0 ef1`uc ]
@@ -1698,130 +1707,181 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;D:/STR/packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\include\proc/pic16f18875.h: 36489: __asm("TOSH equ 0FEFh");
 [; <" TOSH equ 0FEFh ;# ">
 [v $root$_main `(v ~T0 @X0 0 e ]
-"61 main.c
-[; ;main.c: 61: void main(void)
+"66 main.c
+[; ;main.c: 66: void main(void)
 [v _main `(v ~T0 @X0 1 ef ]
-"62
-[; ;main.c: 62: {
+"67
+[; ;main.c: 67: {
 {
 [e :U _main ]
 [f ]
-"63
-[; ;main.c: 63:     unsigned char c;
+"68
+[; ;main.c: 68:     unsigned char c;
 [v _c `uc ~T0 @X0 1 a ]
-"64
-[; ;main.c: 64:     char buf[17];
+"69
+[; ;main.c: 69:     char buf[17];
 [v _buf `uc ~T0 @X0 -> 17 `i a ]
-"65
-[; ;main.c: 65:     unsigned char pmon = 0;
+"70
+[; ;main.c: 70:     uint8_t bright;
+[v _bright `uc ~T0 @X0 1 a ]
+"71
+[; ;main.c: 71:     unsigned char pmon = 0;
 [v _pmon `uc ~T0 @X0 1 a ]
 [e = _pmon -> -> 0 `i `uc ]
-"68
-[; ;main.c: 68:     SYSTEM_Initialize();
+"72
+[; ;main.c: 72:     _Bool eeprom_first = 0;
+[v _eeprom_first `a ~T0 @X0 1 a ]
+[e = _eeprom_first -> -> 0 `i `a ]
+"73
+[; ;main.c: 73:     uint8_t ALAF = 0;
+[v _ALAF `uc ~T0 @X0 1 a ]
+[e = _ALAF -> -> 0 `i `uc ]
+"76
+[; ;main.c: 76:     SYSTEM_Initialize();
 [e ( _SYSTEM_Initialize ..  ]
-"86
-[; ;main.c: 86:     OpenI2C();
-[e ( _OpenI2C ..  ]
-"91
-[; ;main.c: 91:     LCDinit();
-[e ( _LCDinit ..  ]
-"93
-[; ;main.c: 93:     TMR1_SetInterruptHandler(clock_isr);
-[e ( _TMR1_SetInterruptHandler (1 &U _clock_isr ]
 "94
-[; ;main.c: 94:     (INTCONbits.GIE = 1);
-[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
-"95
-[; ;main.c: 95:     (INTCONbits.PEIE = 1);
-[e = . . _INTCONbits 0 2 -> -> 1 `i `uc ]
-"96
-[; ;main.c: 96:     while (1)
-[e :U 1622 ]
-"97
-[; ;main.c: 97:     {
-{
+[; ;main.c: 94:     OpenI2C();
+[e ( _OpenI2C ..  ]
 "99
-[; ;main.c: 99:         if (tick_1s) {
+[; ;main.c: 99:     LCDinit();
+[e ( _LCDinit ..  ]
+"101
+[; ;main.c: 101:     TMR1_SetInterruptHandler(clock_isr);
+[e ( _TMR1_SetInterruptHandler (1 &U _clock_isr ]
+"102
+[; ;main.c: 102:     (INTCONbits.GIE = 1);
+[e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
+"103
+[; ;main.c: 103:     (INTCONbits.PEIE = 1);
+[e = . . _INTCONbits 0 2 -> -> 1 `i `uc ]
+"104
+[; ;main.c: 104:     while (1)
+[e :U 1622 ]
+"105
+[; ;main.c: 105:     {
+{
+"107
+[; ;main.c: 107:         if (tick_1s) {
 [e $ ! != -> _tick_1s `i -> 0 `i 1624  ]
 {
-"100
-[; ;main.c: 100:             tick_1s = 0;
+"108
+[; ;main.c: 108:             tick_1s = 0;
 [e = _tick_1s -> -> 0 `i `a ]
-"101
-[; ;main.c: 101:             do { LATAbits.LATA7 = ~LATAbits.LATA7; } while(0);
+"109
+[; ;main.c: 109:             do { LATAbits.LATA7 = ~LATAbits.LATA7; } while(0);
 [e :U 1627 ]
 {
 [e = . . _LATAbits 0 7 -> ~ -> . . _LATAbits 0 7 `i `uc ]
 }
 [e :U 1626 ]
-"103
-[; ;main.c: 103:             pmon++;
-[e ++ _pmon -> -> 1 `i `uc ]
-"105
-[; ;main.c: 105:             if (pmon >= 5){
-[e $ ! >= -> _pmon `i -> 5 `i 1628  ]
-{
-"106
-[; ;main.c: 106:                 c = readTC74();
-[e = _c ( _readTC74 ..  ]
-"107
-[; ;main.c: 107:                 LCDcmd(0x80);
-[e ( _LCDcmd (1 -> -> 128 `i `uc ]
-"108
-[; ;main.c: 108:                 while (LCDbusy());
-[e $U 1629  ]
-[e :U 1630 ]
-[e :U 1629 ]
-[e $ != ( _LCDbusy ..  -> 0 `i 1630  ]
-[e :U 1631 ]
-"109
-[; ;main.c: 109:                 LCDstr("Temp");
-[e ( _LCDstr (1 :s 1C ]
-"110
-[; ;main.c: 110:                 LCDpos(0,8);
-[e ( _LCDpos (2 , -> -> 0 `i `uc -> -> 8 `i `uc ]
 "111
-[; ;main.c: 111:                 while (LCDbusy());
+[; ;main.c: 111:             pmon++;
+[e ++ _pmon -> -> 1 `i `uc ]
+"113
+[; ;main.c: 113:             if (eeprom_first){
+[e $ ! != -> _eeprom_first `i -> 0 `i 1628  ]
+{
+"114
+[; ;main.c: 114:                 if (ALAF == 1){
+[e $ ! == -> _ALAF `i -> 1 `i 1629  ]
+{
+"115
+[; ;main.c: 115:                     unsigned char alarm_type = alarm(c, bright);
+[v _alarm_type `uc ~T0 @X0 1 a ]
+[e = _alarm_type ( _alarm (2 , _c _bright ]
+"116
+[; ;main.c: 116:                     if (alarm_type != 0){
+[e $ ! != -> _alarm_type `i -> 0 `i 1630  ]
+{
+"119
+[; ;main.c: 119:                     }
+}
+[e :U 1630 ]
+"120
+[; ;main.c: 120:                 }
+}
+[e :U 1629 ]
+"121
+[; ;main.c: 121:             }
+}
+[e :U 1628 ]
+"122
+[; ;main.c: 122:             if (pmon >= 5){
+[e $ ! >= -> _pmon `i -> 5 `i 1631  ]
+{
+"123
+[; ;main.c: 123:                 c = readTC74();
+[e = _c ( _readTC74 ..  ]
+"124
+[; ;main.c: 124:                 bright = brightness();
+[e = _bright ( _brightness ..  ]
+"125
+[; ;main.c: 125:                 eeprom_record(0x7000, c, bright);
+[e ( _eeprom_record (3 , , -> -> 28672 `i `us _c _bright ]
+"126
+[; ;main.c: 126:                 eeprom_first = 1;
+[e = _eeprom_first -> -> 1 `i `a ]
+"129
+[; ;main.c: 129:                 LCDcmd(0x80);
+[e ( _LCDcmd (1 -> -> 128 `i `uc ]
+"130
+[; ;main.c: 130:                 while (LCDbusy());
 [e $U 1632  ]
 [e :U 1633 ]
 [e :U 1632 ]
 [e $ != ( _LCDbusy ..  -> 0 `i 1633  ]
 [e :U 1634 ]
-"112
-[; ;main.c: 112:                 LCDstr("STR-RTS");
-[e ( _LCDstr (1 :s 2C ]
-"113
-[; ;main.c: 113:                 LCDcmd(0xc0);
-[e ( _LCDcmd (1 -> -> 192 `i `uc ]
-"114
-[; ;main.c: 114:                 sprintf(buf, "%02d C", c);
-[e ( _sprintf (1 , (. , &U _buf :s 3C -> _c `i ]
-"115
-[; ;main.c: 115:                 while (LCDbusy());
+"131
+[; ;main.c: 131:                 LCDstr("Temp");
+[e ( _LCDstr (1 :s 1C ]
+"132
+[; ;main.c: 132:                 LCDpos(0,8);
+[e ( _LCDpos (2 , -> -> 0 `i `uc -> -> 8 `i `uc ]
+"133
+[; ;main.c: 133:                 while (LCDbusy());
 [e $U 1635  ]
 [e :U 1636 ]
 [e :U 1635 ]
 [e $ != ( _LCDbusy ..  -> 0 `i 1636  ]
 [e :U 1637 ]
-"116
-[; ;main.c: 116:                 LCDstr(buf);
+"134
+[; ;main.c: 134:                 LCDstr("STR-RTS");
+[e ( _LCDstr (1 :s 2C ]
+"135
+[; ;main.c: 135:                 LCDcmd(0xc0);
+[e ( _LCDcmd (1 -> -> 192 `i `uc ]
+"136
+[; ;main.c: 136:                 sprintf(buf, "%02d C", c);
+[e ( _sprintf (1 , (. , &U _buf :s 3C -> _c `i ]
+"137
+[; ;main.c: 137:                 while (LCDbusy());
+[e $U 1638  ]
+[e :U 1639 ]
+[e :U 1638 ]
+[e $ != ( _LCDbusy ..  -> 0 `i 1639  ]
+[e :U 1640 ]
+"138
+[; ;main.c: 138:                 LCDstr(buf);
 [e ( _LCDstr (1 &U _buf ]
-"117
-[; ;main.c: 117:         }
+"139
+[; ;main.c: 139:                 pmon = 0;
+[e = _pmon -> -> 0 `i `uc ]
+"140
+[; ;main.c: 140:         }
 }
-[e :U 1628 ]
-"118
-[; ;main.c: 118:             }
+[e :U 1631 ]
+"141
+[; ;main.c: 141:             }
 }
 [e :U 1624 ]
-"120
-[; ;main.c: 120:     }
+"143
+[; ;main.c: 143:     }
 }
 [e :U 1621 ]
 [e $U 1622  ]
 [e :U 1623 ]
-"121
-[; ;main.c: 121: }
+"144
+[; ;main.c: 144: }
 [e :UE 1620 ]
 }
 [p f _sprintf 8421508 ]

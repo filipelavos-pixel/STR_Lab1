@@ -12,6 +12,8 @@
 extern "C" {
 #endif
     
+#include "stdint.h"
+    
 extern uint8_t ALAH;
 extern uint8_t ALAM;
 extern uint8_t ALAS;
