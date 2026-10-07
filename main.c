@@ -62,7 +62,7 @@
                          Main application
  */
     
-    
+
 void main(void)
 {    
     unsigned char c;
@@ -114,8 +114,8 @@ void main(void)
                 if (ALAF == 1){
                     unsigned char alarm_type = alarm(c, bright);
                     if (alarm_type != 0){
-                        /*Imprimir notificação de alarme (até interação user)
-                         Gerar um pulso PWM num LED ou botão (duração de TALA)*/
+                        /*Imprimir notificaï¿½ï¿½o de alarme (atï¿½ interaï¿½ï¿½o user)
+                         Gerar um pulso PWM num LED ou botï¿½o (duraï¿½ï¿½o de TALA)*/
                     }
                 }
             }
@@ -125,7 +125,7 @@ void main(void)
                 eeprom_record(EEAddr, c, bright);
                 eeprom_first = true;
                 
-                //Esta parte do LCD não foi vista ainda ao pormenor
+                //Esta parte do LCD nï¿½o foi vista ainda ao pormenor
                 LCDcmd(0x80);       //first line, first column
                 while (LCDbusy());
                 LCDstr("Temp");
@@ -142,6 +142,7 @@ void main(void)
             
     }
 }
+
 /**
  End of File
 */

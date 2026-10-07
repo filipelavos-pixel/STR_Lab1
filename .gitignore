@@ -1,0 +1,30 @@
+# MPLAB X / NetBeans private settings
+nbproject/private/
+private/
+
+# Build outputs
+build/
+dist/
+
+# Generated binaries / debug artefacts
+*.hex
+*.elf
+*.map
+*.lst
+*.o
+*.d
+*.p1
+*.pre
+*.sym
+*.cof
+
+# IDE / OS clutter
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/

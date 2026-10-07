@@ -38,8 +38,6 @@ uint8_t brightness(void){
     
     uint16_t adcResult = ADCC_GetSingleConversion(POT_CHANNEL);
     
-
     adcResult = adcResult/128;
     return (uint8_t) adcResult;
-    
 }
