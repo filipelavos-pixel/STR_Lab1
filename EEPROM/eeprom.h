@@ -21,7 +21,7 @@ extern uint8_t bright_min;
 extern char eeprom_start;
 
 
-void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright);
+void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright, uint8_t eeprom_start);
 
 #ifdef	__cplusplus
 }

@@ -19,5 +19,5 @@ unsigned char alarm(unsigned char c, uint8_t bright){
     if (bright < parameters.ALAL){
         return 'L';
     }
-    return 0;
+    return '0';
 }

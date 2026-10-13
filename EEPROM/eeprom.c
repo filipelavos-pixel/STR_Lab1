@@ -8,7 +8,7 @@ unsigned char temperature_max;
 unsigned char temperature_min;
 uint8_t bright_max;
 uint8_t bright_min;
-char eeprom_start = 0;
+uint8_t eeprom_start = 0;
 
 void eeprom_record(uint16_t EEAddr, unsigned char c, uint8_t bright) {
     
