@@ -2,24 +2,21 @@
 #include "alarms.h"
 #include "../Clock/clock.h"
 #include "stdint.h"
-
-uint8_t ALAH = 12, ALAM = 0, ALAS = 0;
-unsigned char ALAT = 25;
-uint8_t ALAL = 3;
+#include "../Parameters_Block/parameters_block.h"
 
 unsigned char alarm(unsigned char c, uint8_t bright){
     
-    if (clk_h >= ALAH){
-        if (clk_m >= ALAM){
-            if(clk_s >= ALAS){
+    if (parameters.CLKH >= parameters.ALAH){
+        if (parameters.CLKM >= parameters.ALAM){
+            if(CLKS >= parameters.ALAS){
                 return 'C';
             }
         }
     }
-    if (c > ALAT){
+    if (c > parameters.ALAT){
         return 'T';
     }
-    if (bright < ALAL){
+    if (bright < parameters.ALAL){
         return 'L';
     }
     return 0;

@@ -51,11 +51,12 @@
 #include "stdio.h"
 #include "stdbool.h"
 #include "stdint.h"
+#include "Parameters_Block/parameters_block.h"
+#include "Interface/interface.h"
 
 
-#define PMON 5
 #define EEAddr    0x7000
-#define TALA 3
+
 
 
 /*
@@ -66,14 +67,14 @@
 void main(void)
 {    
     unsigned char c;
-    char buf[17];
     uint8_t bright;
     unsigned char pmon = 0;
+    unsigned char pwm_count = 0;
     bool eeprom_first = false;
-    uint8_t ALAF = 0;
 
     // initialize the device
     SYSTEM_Initialize();
+    DefaultParameters();
 
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     // Use the following macros to:
@@ -101,6 +102,9 @@ void main(void)
     TMR1_SetInterruptHandler(clock_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
+    TMR2_Initialize();
+    PWM6_Initialize();
+    
     while (1)
     {
         // Add your application code
@@ -111,34 +115,45 @@ void main(void)
             pmon++;
             
             if (eeprom_first){
-                if (ALAF == 1){
+                if (parameters.ALAF == 1){
                     unsigned char alarm_type = alarm(c, bright);
                     if (alarm_type != 0){
-                        /*Imprimir notifica��o de alarme (at� intera��o user)
-                         Gerar um pulso PWM num LED ou bot�o (dura��o de TALA)*/
+                        TMR2_StartTimer();
+                        PWM6_LoadDutyValue(800);
+                        pwm_count++;
+                        if (pwm_count >= parameters.TALA){
+                            PWM6_LoadDutyValue(0);
+                            TMR2_StopTimer();
+                            pwm_count = 0;
+                        }
+                    }
+                    else {
+                        pwm_count = 0;
                     }
                 }
+                if (c > parameters.ALAT){
+                    LED_D4_SetHigh();
+                }
+                else{
+                    LED_D4_SetLow();
+                }
+                if (bright < parameters.ALAL){
+                    LED_D3_SetHigh();
+                }
+                else{
+                    LED_D3_SetLow();
+                }
             }
-            if (pmon >= PMON){
+            if (pmon >= parameters.PMON){
                 c = readTC74();
                 bright = brightness();
                 eeprom_record(EEAddr, c, bright);
                 eeprom_first = true;
-                
-                //Esta parte do LCD n�o foi vista ainda ao pormenor
-                LCDcmd(0x80);       //first line, first column
-                while (LCDbusy());
-                LCDstr("Temp");
-                LCDpos(0,8);
-                while (LCDbusy());
-                LCDstr("STR-RTS");
-                LCDcmd(0xc0);       // second line, first column
-                sprintf(buf, "%02d C", c);
-                while (LCDbusy());
-                LCDstr(buf);
                 pmon = 0;
-        }
+                
             }
+            normal_interface(c, bright);
+        }
             
     }
 }

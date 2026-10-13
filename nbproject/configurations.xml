@@ -18,6 +18,8 @@
         <itemPath>mcc_generated_files/interrupt_manager.h</itemPath>
         <itemPath>mcc_generated_files/adcc.h</itemPath>
         <itemPath>mcc_generated_files/memory.h</itemPath>
+        <itemPath>mcc_generated_files/pwm6.h</itemPath>
+        <itemPath>mcc_generated_files/tmr2.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -49,6 +51,10 @@
         <itemPath>I2C/i2c.c</itemPath>
         <itemPath>I2C/i2c.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f6" displayName="Interface" projectFiles="true">
+        <itemPath>Interface/interface.c</itemPath>
+        <itemPath>Interface/interface.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="LCD" displayName="LCD" projectFiles="true">
         <itemPath>LCD/lcd.c</itemPath>
         <itemPath>LCD/lcd.h</itemPath>
@@ -67,6 +73,12 @@
         <itemPath>mcc_generated_files/interrupt_manager.c</itemPath>
         <itemPath>mcc_generated_files/adcc.c</itemPath>
         <itemPath>mcc_generated_files/memory.c</itemPath>
+        <itemPath>mcc_generated_files/tmr2.c</itemPath>
+        <itemPath>mcc_generated_files/pwm6.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="Parameters_Block" projectFiles="true">
+        <itemPath>Parameters_Block/parameters_block.c</itemPath>
+        <itemPath>Parameters_Block/parameters_block.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Sensors" projectFiles="true">
         <itemPath>Sensors/sensors.c</itemPath>
@@ -88,7 +100,7 @@
         <targetDevice>PIC16F18875</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PKOBSKDEPlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>3.10</languageToolchainVersion>
         <platform>3</platform>

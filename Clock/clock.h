@@ -16,9 +16,7 @@ extern "C" {
 #include "stdbool.h"
 
 
-extern volatile uint8_t clk_h;
-extern volatile uint8_t clk_m;
-extern volatile uint8_t clk_s;
+extern volatile uint8_t CLKS;
 extern volatile bool tick_1s;
 
 void clock_isr(void);

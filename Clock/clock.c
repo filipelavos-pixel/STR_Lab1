@@ -2,20 +2,21 @@
 #include "clock.h"
 #include "stdbool.h"
 #include "stdint.h"
+#include "../Parameters_Block/parameters_block.h"
 
-volatile uint8_t clk_h = 0, clk_m = 0, clk_s = 0;
+volatile uint8_t CLKS = 0;
 volatile bool tick_1s = false;
 
     void clock_isr(void) {
-        clk_s++;
-        if (clk_s >= 60) { 
-            clk_s = 0;
-            clk_m++;
-            if (clk_m >= 60) { 
-                clk_m = 0;
-                clk_h++;
-                if (clk_h >= 24) {
-                    clk_h = 0; 
+        CLKS++;
+        if (CLKS >= 60) { 
+            CLKS = 0;
+            parameters.CLKM++;
+            if (parameters.CLKM >= 60) { 
+                parameters.CLKM = 0;
+                parameters.CLKH++;
+                if (parameters.CLKH >= 24) {
+                    parameters.CLKH = 0; 
                 }
             } 
         }
