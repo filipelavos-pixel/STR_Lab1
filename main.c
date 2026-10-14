@@ -53,6 +53,7 @@
 #include "stdint.h"
 #include "Parameters_Block/parameters_block.h"
 #include "Interface/interface.h"
+#include "Button/button.h"
 
 
 #define EEAddr    0x7000
@@ -68,22 +69,8 @@ void main(void)
 {    
     unsigned char c;
     uint8_t bright;
-    unsigned char pmon = 0;
-    unsigned char pwm_count = 0;
-    bool alarm_clock = false;
-    bool alarm_c = false;
-    bool alarm_bright = false;
-    uint8_t S1_value;
-    uint8_t S2_value;
-    uint8_t mode = 0;
-    uint8_t mode_count = 0;
-    uint8_t S1_state = 1;
-    bool S1_pressed = false;
-    uint8_t S2_state = 1;
-    bool S2_pressed = false;
-    uint8_t cursor_pos = 0;
-    bool current = true;
-
+    unsigned char pmon = 0; //Counter for PMON duration
+    unsigned char pwm_count = 0; //Counter for PWM duration
     // initialize the device
     SYSTEM_Initialize();
     DefaultParameters();
@@ -111,157 +98,42 @@ void main(void)
     //WPUC4 = 1;
     LCDinit();
 
+    //clock initialized, and PWM
     TMR1_SetInterruptHandler(clock_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
     TMR2_Initialize();
     PWM6_Initialize();
     
+    //Readings for inicial record
     c = readTC74();
     bright = brightness();
     eeprom_record(EEAddr, c, bright);
     
+    
     while (1)
-    {
-        S1_value = BUTTON_S1_GetValue();
-        S2_value = BUTTON_S2_GetValue();
-        S1_pressed = false;
-        S2_pressed = false;
-        
-        
-        if (S1_state == 1) {
-            if (S1_value == 0) {
-                S1_pressed = true;
-            }
-        }
-        S1_state = S1_value;
-        if (S2_state == 1) {
-            if (S2_value == 0) {
-                S2_pressed = true;
-            }
-        }
-        S2_state = S2_value;
-        if (mode == 2) {
-            if (S1_pressed) {
-                cursor_pos++;
-            }
-
-            if (S2_pressed) {
-                switch (cursor_pos) {
-                    case 0: 
-                        if (current){
-                            if (parameters.CLKH == 23){
-                                break;
-                            }
-                            parameters.CLKH++;
-                        }
-                        else{
-                            if (parameters.ALAH == 23){
-                                break;
-                            }                            
-                            parameters.ALAH++;
-                        }
-                        break;
-                    case 1:
-                        if (current){
-                            if (parameters.CLKM == 59){
-                                break;
-                            }
-                            parameters.CLKM++;
-                        }
-                        else{
-                            if (parameters.ALAM == 59){
-                                break;
-                            }
-                            parameters.ALAM++;
-                        }
-                        break;
-                    case 2:
-                        if (current){
-                            if (CLKS == 59){
-                                break;
-                            }
-                            CLKS++;
-                        }
-                        else{
-                            if (parameters.ALAS == 59){
-                                break;
-                            }
-                            parameters.ALAS++;
-                        }
-                        break;
-                    case 3:
-                        cursor_pos = 0;
-                        current = false;
-                        break;
-                    case 4: 
-                        current = true;
-                        if (parameters.ALAT == 50){
-                                break;
-                            }
-                        parameters.ALAT++; 
-                        break;
-                    case 5:
-                        if (parameters.ALAL == 7){
-                                break;
-                            }
-                        parameters.ALAL++; 
-                        break;
-                    case 6: 
-                        parameters.ALAF = !parameters.ALAF; 
-                        break;
-                    case 7: 
-                        eeprom_start = 0;
-                        break;
-                    case 8:
-                        break;
-                }
-            }
-
-            if (cursor_pos >= 8){
-                cursor_pos = 0;
-                mode = 0;
-            }else{
-                configuration_interface(cursor_pos, c, bright, current);
-            }
-        }
-        else if (mode == 1){
-            if (mode_count < 2){
-                switch_interface();
-                if (S1_pressed){
-                    mode = 2;
-                    mode_count = 0;
-                }
-            }
-            else{
-                mode_count = 0;
-                mode = 0;
-            }
-
-        }
-        else if (mode == 0){
-            normal_interface(c, bright, alarm_clock, alarm_c, alarm_bright);
-            if (S1_pressed){
-                mode = 1;
-                alarm_clock = false;
-                alarm_c = false;
-                alarm_bright = false;
-            }
-        }        
-        // Add your application code
+    {   
+        //Button user interactions and its effects
+        button_control(EEAddr, c, bright);
+        // After each 1 second, everything down runs
         if (tick_1s) { 
             tick_1s = false; 
             LED_D5_Toggle();
             
             pmon++;
             
+            //all real time conditions(see button.c properly)
             if (mode == 1){
                 mode_count++;
             }
+            if (mode == 3){
+                presentation_counter++;
+            }
             
-            
+            //If alarm definition is active
             if (parameters.ALAF == 1){
                 unsigned char alarm_type = alarm(c, bright);
+                // if there is an alarm notification, light up D2 with PWM during TALA
                 if (alarm_type != '0'){
                     TMR2_StartTimer();
                     PWM6_LoadDutyValue(800);
@@ -284,7 +156,7 @@ void main(void)
                 else {
                     pwm_count = 0;
                 }
-            }
+            }//Light up two LEDS for reach threshold limits
             if (c > parameters.ALAT){
                 LED_D4_SetHigh();
             }
@@ -297,6 +169,7 @@ void main(void)
             else{
                 LED_D3_SetLow();
             }
+            //Reading temperature and brightness every PMON seconds
             if (pmon >= parameters.PMON){
                 c = readTC74();
                 bright = brightness();

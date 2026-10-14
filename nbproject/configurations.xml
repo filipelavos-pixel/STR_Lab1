@@ -39,6 +39,10 @@
         <itemPath>Alarms/alarms.c</itemPath>
         <itemPath>Alarms/alarms.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f7" displayName="Button" projectFiles="true">
+        <itemPath>Button/button.c</itemPath>
+        <itemPath>Button/button.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="Clock" projectFiles="true">
         <itemPath>Clock/clock.c</itemPath>
         <itemPath>Clock/clock.h</itemPath>

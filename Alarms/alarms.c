@@ -4,6 +4,7 @@
 #include "stdint.h"
 #include "../Parameters_Block/parameters_block.h"
 
+//Returns the letter that corresponds to the alarm being activated by threshold conditions, if not, returns 0
 unsigned char alarm(unsigned char c, uint8_t bright){
     
     if (parameters.CLKH >= parameters.ALAH){

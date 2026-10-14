@@ -18,10 +18,11 @@ extern unsigned char temperature_max;
 extern unsigned char temperature_min;
 extern uint8_t bright_max;
 extern uint8_t bright_min;
-extern char eeprom_start;
+extern uint8_t eeprom_start;
 
 
-void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright, uint8_t eeprom_start);
+void eeprom_record(uint16_t EEadr, unsigned char c, uint8_t bright);
+void eeprom_read_records(uint16_t EEAddr, char buf1[17], char buf2[17], char buf3[17], char buf4[17]);
 
 #ifdef	__cplusplus
 }

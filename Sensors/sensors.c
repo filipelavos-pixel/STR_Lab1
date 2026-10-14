@@ -5,6 +5,7 @@
 #include "../mcc_generated_files/adcc.h"
 #include "stdint.h"
 
+// Reads temperature from sensor
 unsigned char readTC74 (void)
 {
 	unsigned char value;
@@ -34,6 +35,7 @@ do{
 	return value;
 }
 
+//Reads and calculates brightness correctly from potentiometer
 uint8_t brightness(void){
     
     uint16_t adcResult = ADCC_GetSingleConversion(POT_CHANNEL);

@@ -3,6 +3,7 @@
 #include "eeprom.h"
 #include "stdint.h"
 #include "../Parameters_Block/parameters_block.h"
+#include "../mcc_generated_files/mcc.h"
 
 unsigned char temperature_max;
 unsigned char temperature_min;
@@ -10,6 +11,7 @@ uint8_t bright_max;
 uint8_t bright_min;
 uint8_t eeprom_start = 0;
 
+//Record values of temperature and brightness in memory
 void eeprom_record(uint16_t EEAddr, unsigned char c, uint8_t bright) {
     
     if (eeprom_start == 0){
@@ -68,4 +70,12 @@ void eeprom_record(uint16_t EEAddr, unsigned char c, uint8_t bright) {
         }
     }
 
+}
+//Read the values stored on memory
+void eeprom_read_records(uint16_t EEAddr, char buf1[17], char buf2[17], char buf3[17], char buf4[17]){
+    
+    sprintf(buf1, "%02d:%02d:%02d  %02dC L%d", DATAEE_ReadByte(EEAddr), DATAEE_ReadByte(EEAddr + 1), DATAEE_ReadByte(EEAddr + 2), DATAEE_ReadByte(EEAddr + 3), DATAEE_ReadByte(EEAddr + 4));
+    sprintf(buf2, "%02d:%02d:%02d  %02dC L%d", DATAEE_ReadByte(EEAddr + 5), DATAEE_ReadByte(EEAddr + 6), DATAEE_ReadByte(EEAddr + 7), DATAEE_ReadByte(EEAddr + 8), DATAEE_ReadByte(EEAddr + 9));
+    sprintf(buf3, "%02d:%02d:%02d  %02dC L%d", DATAEE_ReadByte(EEAddr + 10), DATAEE_ReadByte(EEAddr + 11), DATAEE_ReadByte(EEAddr + 12), DATAEE_ReadByte(EEAddr + 13), DATAEE_ReadByte(EEAddr + 14));
+    sprintf(buf4, "%02d:%02d:%02d  %02dC L%d", DATAEE_ReadByte(EEAddr + 15), DATAEE_ReadByte(EEAddr + 16), DATAEE_ReadByte(EEAddr + 17), DATAEE_ReadByte(EEAddr + 18), DATAEE_ReadByte(EEAddr + 19));
 }

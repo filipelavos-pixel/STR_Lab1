@@ -1,9 +1,12 @@
 
+#include "../mcc_generated_files/mcc.h"
 #include "../LCD/lcd.h"
 #include "interface.h"
 #include "../Parameters_Block/parameters_block.h"
 #include "../Clock/clock.h"
+#include "../EEPROM/eeprom.h"
 
+//Interface constructed for normal mode
 void normal_interface(unsigned char c, uint8_t bright, bool alarm_clock, bool alarm_c, bool alarm_bright){
     
     char buf[17];
@@ -46,6 +49,7 @@ void normal_interface(unsigned char c, uint8_t bright, bool alarm_clock, bool al
     LCDstr(buf);
 }
 
+// interface on LCD for transition mode (2 seconds from normal mode to configuration)
 void switch_interface(){
     
     char buf[17];
@@ -66,6 +70,7 @@ void switch_interface(){
     sprintf(buf, "%02d C         L %d", parameters.ALAT, parameters.ALAL);
     LCDstr(buf);
 }
+// interface of configuration mode
 void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, bool current){
     
     char buf[17];
@@ -137,4 +142,32 @@ void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, 
     }
     LCDstr(buf);
     
+}
+// interface for max min values
+void LCD_max_min(uint16_t EEAddr, uint8_t presentation_counter){
+    
+    char buf1[17], buf2[17], buf3[17], buf4[17];
+    
+    eeprom_read_records(EEAddr, buf1, buf2, buf3, buf4);
+    
+    switch (presentation_counter){
+        case 0:
+            LCDcmd(0x80);
+            while (LCDbusy());
+            LCDstr(buf1);
+            LCDcmd(0xc0); 
+            while (LCDbusy());
+            LCDstr(buf2);
+            break;
+        case 1:
+            LCDcmd(0x80);
+            while (LCDbusy());
+            LCDstr(buf3);
+            LCDcmd(0xc0); 
+            while (LCDbusy());
+            LCDstr(buf4);
+            break;
+        default:
+            break;
+    }
 }

@@ -1,9 +1,10 @@
 
+#include "../mcc_generated_files/mcc.h"
 #include "parameters_block.h"
 
 // Alocação real da variável global
 Config_Parameters parameters;
-
+//Default parameters initialized
 void DefaultParameters(void) {
     parameters.MW   = 0xA5;    // Palavra mágica
     parameters.PMON = 5;       
