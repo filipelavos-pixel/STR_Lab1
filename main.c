@@ -71,6 +71,7 @@ void main(void)
     uint8_t bright;
     unsigned char pmon = 0; //Counter for PMON duration
     unsigned char pwm_count = 0; //Counter for PWM duration
+    bool enabled_D2 = false;
     // initialize the device
     SYSTEM_Initialize();
     DefaultParameters();
@@ -137,11 +138,13 @@ void main(void)
                 if (alarm_type != '0'){
                     TMR2_StartTimer();
                     PWM6_LoadDutyValue(800);
+                    enabled_D2 = true;
                     pwm_count++;
                     if (pwm_count >= parameters.TALA){
                         PWM6_LoadDutyValue(0);
                         TMR2_StopTimer();
                         pwm_count = 0;
+                        enabled_D2 = false;
                     }
                     if (alarm_type == 'C'){
                         alarm_clock = true;
@@ -156,7 +159,14 @@ void main(void)
                 else {
                     pwm_count = 0;
                 }
-            }//Light up two LEDS for reach threshold limits
+            }
+            else{
+                if (enabled_D2){
+                    PWM6_LoadDutyValue(0);
+                    TMR2_StopTimer();                    
+                }
+            }
+            //Light up two LEDS for reach threshold limits
             if (c > parameters.ALAT){
                 LED_D4_SetHigh();
             }

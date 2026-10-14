@@ -3231,7 +3231,7 @@
          <value>2</value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="ADCACTPPS%aux2"/>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="ADCACTPPS%aux3"/>
          <value>%DESELECT%</value>
       </entry>
       <entry>
@@ -3551,15 +3551,15 @@
          <value>enabled</value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T1CKIPPS%aux0"/>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T1CKIPPS%aux1"/>
          <value>%DESELECT%</value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T1GPPS%aux1"/>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T1GPPS%aux2"/>
          <value>%DESELECT%</value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T2AINPPS%aux3"/>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="Pin Module" name="T2AINPPS%aux0"/>
          <value>%DESELECT%</value>
       </entry>
       <entry>
@@ -10385,12 +10385,12 @@
          <hash>5e1369e59d5d8eb62aedc02d2208eefe2cc54d10205a3b806528d2ca7b229a42</hash>
       </entry>
       <entry>
-         <file>mcc_generated_files\adcc.h</file>
-         <hash>c9d6d1779bf384d81aac06fe4134459c66642d5fb2ff6781d2f3651461742dd2</hash>
-      </entry>
-      <entry>
          <file>mcc_generated_files\pin_manager.h</file>
          <hash>92ade2eef3ab5065f4213d8aa4836e47abe82619e53da8377f8fbcaef2c5b346</hash>
+      </entry>
+      <entry>
+         <file>mcc_generated_files\adcc.h</file>
+         <hash>c9d6d1779bf384d81aac06fe4134459c66642d5fb2ff6781d2f3651461742dd2</hash>
       </entry>
       <entry>
          <file>mcc_generated_files\tmr1.c</file>

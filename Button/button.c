@@ -69,12 +69,14 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
                 case 0: 
                     if (current){
                         if (parameters.CLKH == 23){
+                            parameters.CLKH = 0;
                             break;
                         }
                         parameters.CLKH++;
                     }
                     else{
                         if (parameters.ALAH == 23){
+                            parameters.ALAH = 0;
                             break;
                         }                            
                         parameters.ALAH++;
@@ -83,12 +85,14 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
                 case 1:
                     if (current){
                         if (parameters.CLKM == 59){
+                            parameters.CLKM = 0;
                             break;
                         }
                         parameters.CLKM++;
                     }
                     else{
                         if (parameters.ALAM == 59){
+                            parameters.ALAM = 0;
                             break;
                         }
                         parameters.ALAM++;
@@ -97,12 +101,14 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
                 case 2:
                     if (current){
                         if (CLKS == 59){
+                            CLKS = 0;
                             break;
                         }
                         CLKS++;
                     }
                     else{
                         if (parameters.ALAS == 59){
+                            parameters.ALAS = 0;
                             break;
                         }
                         parameters.ALAS++;
@@ -115,12 +121,14 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
                 case 4: 
                     current = true;
                     if (parameters.ALAT == 50){
+                        parameters.ALAT = 0;
                             break;
                         }
                     parameters.ALAT++; 
                     break;
                 case 5:
                     if (parameters.ALAL == 7){
+                        parameters.ALAL = 0;
                             break;
                         }
                     parameters.ALAL++; 

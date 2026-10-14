@@ -120,7 +120,7 @@ void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, 
             sprintf(buf, "%02d:%02d:%02d CT>L %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
             break;
         case 6: 
-            sprintf(buf, "%02d:%02d:%02d CTL>%cR", parameters.CLKH, parameters.CLKM, CLKS, A);
+            sprintf(buf, "%02d:%02d:%02d CTL >%cR", parameters.CLKH, parameters.CLKM, CLKS, A);
             break;
         case 7: 
             sprintf(buf, "%02d:%02d:%02d CTL %c>R", parameters.CLKH, parameters.CLKM, CLKS, A);
@@ -131,10 +131,10 @@ void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, 
     while (LCDbusy());
     switch (position) {
         case 4:
-            sprintf(buf, "%02d C        >L %d", parameters.ALAT, bright);
+            sprintf(buf, "%02d C<        L %d", parameters.ALAT, bright);
             break;
         case 5:
-            sprintf(buf, "%02d C<        L %d", c, parameters.ALAL);
+            sprintf(buf, "%02d C        >L %d", c, parameters.ALAL);
             break;
         default:
             sprintf(buf, "%02d C         L %d", c, bright);
