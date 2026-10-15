@@ -12,7 +12,8 @@ volatile bool tick_1s = false;
         if (CLKS >= 60) { 
             CLKS = 0;
             parameters.CLKM++;
-            if (parameters.CLKM >= 60) { 
+            param_change = true;
+            if (parameters.CLKM >= 60) {
                 parameters.CLKM = 0;
                 parameters.CLKH++;
                 if (parameters.CLKH >= 24) {

@@ -11,7 +11,14 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-    
+
+#include "stdint.h"
+#include "stdbool.h"
+
+    // Parameters block at the begin of the EEPROM (MW ... checksum)
+#define PARAMS_ADDR 0x7000
+#define MAGIC_WORD  0xA5
+
     typedef struct {
         uint8_t MW;      
         uint8_t PMON;      
@@ -29,8 +36,12 @@ extern "C" {
 
     
     extern Config_Parameters parameters;
-    
+    extern volatile bool param_change;
+
     void DefaultParameters(void);
+    uint8_t params_checksum(Config_Parameters *p);
+    void params_save(void);
+    bool params_load(void);
 
 
 

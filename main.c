@@ -56,7 +56,8 @@
 #include "Button/button.h"
 
 
-#define EEAddr    0x7000
+// Max/min records go right after the parameters block
+#define EEAddr    (PARAMS_ADDR + sizeof(Config_Parameters))
 
 
 
@@ -80,7 +81,11 @@ void main(void)
     PWM6_LoadDutyValue(0);
     TMR2_StopTimer();
 
-    DefaultParameters();
+    // Restore saved parameters, or use (and save) the defaults if MW/checksum fail
+    if (!params_load()) {
+        DefaultParameters();
+        params_save();
+    }
 
 
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
@@ -121,6 +126,11 @@ void main(void)
     {   
         //Button user interactions and its effects
         button_control(EEAddr, tmp, bright);
+        // Save the parameters block when something changed
+        if (param_change) {
+            param_change = false;
+            params_save();
+        }
         // After each 1 second, everything down runs
         if (tick_1s) { 
             tick_1s = false; 

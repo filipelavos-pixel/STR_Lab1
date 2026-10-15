@@ -67,7 +67,8 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
 
         if (S2_pressed) {
             switch (cursor_pos) {
-                case 0: 
+                case 0:
+                    param_change = true; // CLKH or ALAH changes
                     if (current){
                         if (parameters.CLKH == 23){
                             parameters.CLKH = 0;
@@ -84,6 +85,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                     }
                     break;
                 case 1:
+                    param_change = true; // CLKM or ALAM changes
                     if (current){
                         if (parameters.CLKM == 59){
                             parameters.CLKM = 0;
@@ -108,6 +110,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                         CLKS++;
                     }
                     else{
+                        param_change = true; // CLKS is not saved, only ALAS
                         if (parameters.ALAS == 59){
                             parameters.ALAS = 0;
                             break;
@@ -119,7 +122,8 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                     cursor_pos = 0;
                     current = false;
                     break;
-                case 4: 
+                case 4:
+                    param_change = true;
                     current = true;
                     if (parameters.ALAT == 50){
                         parameters.ALAT = 0;
@@ -128,14 +132,16 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                     parameters.ALAT++; 
                     break;
                 case 5:
+                    param_change = true;
                     if (parameters.ALAL == 7){
                         parameters.ALAL = 0;
                             break;
                         }
                     parameters.ALAL++; 
                     break;
-                case 6: 
-                    parameters.ALAF = !parameters.ALAF; 
+                case 6:
+                    param_change = true;
+                    parameters.ALAF = !parameters.ALAF;
                     break;
                 case 7: 
                     eeprom_start = 0;
