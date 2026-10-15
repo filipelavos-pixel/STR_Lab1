@@ -72,9 +72,16 @@ void main(void)
     unsigned char pmon = 0; //Counter for PMON duration
     unsigned char pwm_count = 0; //Counter for PWM duration
     bool enabled_D2 = false;
+    
     // initialize the device
     SYSTEM_Initialize();
+
+    // Initial State for Alarm Sinalization: OFF
+    PWM6_LoadDutyValue(0);
+    TMR2_StopTimer();
+
     DefaultParameters();
+
 
     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     // Use the following macros to:
@@ -103,8 +110,6 @@ void main(void)
     TMR1_SetInterruptHandler(clock_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
-    TMR2_Initialize();
-    PWM6_Initialize();
     
     //Readings for inicial record
     c = readTC74();
@@ -130,42 +135,56 @@ void main(void)
             if (mode == 3){
                 presentation_counter++;
             }
-            
-            //If alarm definition is active
-            if (parameters.ALAF == 1){
+
+            // Increments the time passed on an active PWM signal for the D2 LED
+            if (enabled_D2) {
+                pwm_count++;
+            }
+
+            // Detecting Alarm conditions
+            if (parameters.ALAF == 1) {
                 unsigned char alarm_type = alarm(c, bright);
-                // if there is an alarm notification, light up D2 with PWM during TALA
-                if (alarm_type != '0'){
-                    TMR2_StartTimer();
-                    PWM6_LoadDutyValue(800);
-                    enabled_D2 = true;
-                    pwm_count++;
-                    if (pwm_count >= parameters.TALA){
-                        PWM6_LoadDutyValue(0);
-                        TMR2_StopTimer();
+
+                if (alarm_type != '0') {
+                    // Start the PWM signal only if it's OFF
+                    if (!enabled_D2) {
                         pwm_count = 0;
-                        enabled_D2 = false;
+                        PWM6_LoadDutyValue(800);
+                        TMR2_StartTimer();
+                        enabled_D2 = true;
                     }
-                    if (alarm_type == 'C'){
+
+                    if (alarm_type == 'C') {
                         alarm_clock = true;
                     }
-                    if (alarm_type == 'T'){
+
+                    if (alarm_type == 'T') {
                         alarm_c = true;
                     }
-                    if (alarm_type == 'L'){
+
+                    if (alarm_type == 'L') {
                         alarm_bright = true;
-                    }                        
+                    }
+
                 }
-                else {
-                    pwm_count = 0;
-                }
+
+            } else {
+                // Here, alarms are deactivated --> ALAF = 0
+                // The sinalization has to be stopped
+                PWM6_LoadDutyValue(0);
+                TMR2_StopTimer();
+                enabled_D2 = false;
+                pwm_count = 0;
             }
-            else{
-                if (enabled_D2){
-                    PWM6_LoadDutyValue(0);
-                    TMR2_StopTimer();                    
-                }
+
+            // PWM sinalization is stopped when the intended duration is achieved
+            if(enabled_D2 && pwm_count >= parameters.TALA) {
+                PWM6_LoadDutyValue(0);
+                TMR2_StopTimer();
+                enabled_D2 = false;
+                pwm_count = 0;
             }
+
             //Light up two LEDS for reach threshold limits
             if (c > parameters.ALAT){
                 LED_D4_SetHigh();
