@@ -28,3 +28,6 @@ Thumbs.db
 
 # VS Code local settings
 .vscode/
+
+# Local notes / analysis (not part of the project)
+docs/

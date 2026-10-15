@@ -17,10 +17,10 @@ extern "C" {
     extern uint8_t mode_count;
     extern uint8_t presentation_counter;
     extern bool alarm_clock;
-    extern bool alarm_c;
+    extern bool alarm_tmp;
     extern bool alarm_bright;
     
-    void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright);
+    void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright);
 
 
 #ifdef	__cplusplus

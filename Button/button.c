@@ -4,6 +4,7 @@
 #include "../Clock/clock.h"
 #include "../EEPROM/eeprom.h"
 #include "../Interface/interface.h"
+#include "../LCD/lcd.h"
 
 uint8_t S1_value; 
 uint8_t S2_value;
@@ -20,7 +21,7 @@ uint8_t mode_count = 0; // count the two seconds in transition mode
 uint8_t presentation_counter = 0; // count 1 second each, for printing on LCD the max min variables in right way
 // type of alarm, if exists or not
 bool alarm_clock = false;
-bool alarm_c = false;
+bool alarm_tmp = false;
 bool alarm_bright = false;
 
 /* S_State corresponds to the last value in get_value, we have to save it and
@@ -38,7 +39,7 @@ bool alarm_bright = false;
  * again if we press a button again.
 */
 
-void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
+void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
     
     //Value of o button in a moment
     S1_value = BUTTON_S1_GetValue();
@@ -147,8 +148,9 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
         if (cursor_pos >= 8){
             cursor_pos = 0;
             mode = 0;
+            LCDcmd(0x0C); // hide the blinking cursor when leaving configuration
         }else{
-            configuration_interface(cursor_pos, c, bright, current);
+            configuration_interface(cursor_pos, tmp, bright, current);
         }
     }
     // in possible transition of normal to configurate mode
@@ -169,11 +171,11 @@ void button_control(uint16_t EEAddr, unsigned char c, uint8_t bright){
     // normal mode
     else if (mode == 0){
 
-        normal_interface(c, bright, alarm_clock, alarm_c, alarm_bright);
+        normal_interface(tmp, bright, alarm_clock, alarm_tmp, alarm_bright);
         if (S1_pressed){
             mode = 1;
             alarm_clock = false;
-            alarm_c = false;
+            alarm_tmp = false;
             alarm_bright = false;
         }
         if (S2_pressed){

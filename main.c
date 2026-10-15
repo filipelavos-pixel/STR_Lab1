@@ -67,7 +67,7 @@
 
 void main(void)
 {    
-    unsigned char c;
+    unsigned char tmp;
     uint8_t bright;
     unsigned char pmon = 0; //Counter for PMON duration
     unsigned char pwm_count = 0; //Counter for PWM duration
@@ -105,22 +105,22 @@ void main(void)
     //WPUC3 = 1;
     //WPUC4 = 1;
     LCDinit();
-
+    LCDcmd(0x0C);       // display on, cursor off (LCDinit leaves it on)
     //clock initialized, and PWM
     TMR1_SetInterruptHandler(clock_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
     
     //Readings for inicial record
-    c = readTC74();
+    tmp = readTC74();
     bright = brightness();
-    eeprom_record(EEAddr, c, bright);
+    eeprom_record(EEAddr, tmp, bright);
     
     
     while (1)
     {   
         //Button user interactions and its effects
-        button_control(EEAddr, c, bright);
+        button_control(EEAddr, tmp, bright);
         // After each 1 second, everything down runs
         if (tick_1s) { 
             tick_1s = false; 
@@ -143,7 +143,7 @@ void main(void)
 
             // Detecting Alarm conditions
             if (parameters.ALAF == 1) {
-                unsigned char alarm_type = alarm(c, bright);
+                unsigned char alarm_type = alarm(tmp, bright);
 
                 if (alarm_type != '0') {
                     // Start the PWM signal only if it's OFF
@@ -159,7 +159,7 @@ void main(void)
                     }
 
                     if (alarm_type == 'T') {
-                        alarm_c = true;
+                        alarm_tmp = true;
                     }
 
                     if (alarm_type == 'L') {
@@ -186,7 +186,7 @@ void main(void)
             }
 
             //Light up two LEDS for reach threshold limits
-            if (c > parameters.ALAT){
+            if (tmp > parameters.ALAT){
                 LED_D4_SetHigh();
             }
             else{
@@ -200,9 +200,9 @@ void main(void)
             }
             //Reading temperature and brightness every PMON seconds
             if (pmon >= parameters.PMON){
-                c = readTC74();
+                tmp = readTC74();
                 bright = brightness();
-                eeprom_record(EEAddr, c, bright);
+                eeprom_record(EEAddr, tmp, bright);
                 pmon = 0;
                 
             }

@@ -7,7 +7,7 @@
 #include "../EEPROM/eeprom.h"
 
 //Interface constructed for normal mode
-void normal_interface(unsigned char c, uint8_t bright, bool alarm_clock, bool alarm_c, bool alarm_bright){
+void normal_interface(unsigned char tmp, uint8_t bright, bool alarm_clock, bool alarm_tmp, bool alarm_bright){
     
     char buf[17];
     unsigned char A;
@@ -21,7 +21,7 @@ void normal_interface(unsigned char c, uint8_t bright, bool alarm_clock, bool al
     else{
         C = ' ';
     }
-    if (alarm_c){
+    if (alarm_tmp){
         T = 'T';
     }
     else{
@@ -45,7 +45,7 @@ void normal_interface(unsigned char c, uint8_t bright, bool alarm_clock, bool al
     LCDstr(buf);
     LCDcmd(0xc0);       // second line, first column
     while (LCDbusy());
-    sprintf(buf, "%02d C         L %d", c, bright);
+    sprintf(buf, "%02d C         L %d", tmp, bright);
     LCDstr(buf);
 }
 
@@ -71,7 +71,7 @@ void switch_interface(){
     LCDstr(buf);
 }
 // interface of configuration mode
-void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, bool current){
+void configuration_interface(uint8_t position, unsigned char tmp, uint8_t bright, bool current){
     
     char buf[17];
     unsigned char A;
@@ -84,64 +84,40 @@ void configuration_interface(uint8_t position, unsigned char c, uint8_t bright, 
     
     LCDcmd(0x80);        // Primeira linha, primeira coluna
     while (LCDbusy());
-    
-    switch (position) {
-        case 0: 
-            if (current){
-                sprintf(buf, ">%02d:%02d:%02d CTL %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            }
-            else{
-                sprintf(buf, ">%02d:%02d:%02d CTL %cR", parameters.ALAH, parameters.ALAM, parameters.ALAS, A);
-            }
-            break;
-        case 1: 
-            if (current){
-                sprintf(buf, "%02d:>%02d:%02d CTL %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            }
-            else{
-                sprintf(buf, "%02d:>%02d:%02d CTL %cR", parameters.ALAH, parameters.ALAM, parameters.ALAS, A);
-            }
-            break;
-        case 2: 
-            if (current){
-                sprintf(buf, "%02d:%02d:>%02d CTL %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            }
-            else{
-                sprintf(buf, "%02d:%02d:>%02d CTL %cR", parameters.ALAH, parameters.ALAM, parameters.ALAS, A);
-            }
-            break;
-        case 3: 
-            sprintf(buf, "%02d:%02d:%02d >CTL %cR", parameters.ALAH, parameters.ALAM, parameters.ALAS, A);
-            break;
-        case 4: 
-            sprintf(buf, "%02d:%02d:%02d C>TL %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            break;
-        case 5: 
-            sprintf(buf, "%02d:%02d:%02d CT>L %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            break;
-        case 6: 
-            sprintf(buf, "%02d:%02d:%02d CTL >%cR", parameters.CLKH, parameters.CLKM, CLKS, A);
-            break;
-        case 7: 
-            sprintf(buf, "%02d:%02d:%02d CTL %c>R", parameters.CLKH, parameters.CLKM, CLKS, A);
-            break;
+    // positions 0-2 show the clock or the alarm (current), C shows the alarm, the rest show the clock
+    if ((position <= 2 && !current) || position == 3){
+        sprintf(buf, "%02d:%02d:%02d  CTL %cR", parameters.ALAH, parameters.ALAM, parameters.ALAS, A);
+    }
+    else{
+        sprintf(buf, "%02d:%02d:%02d  CTL %cR", parameters.CLKH, parameters.CLKM, CLKS, A);
     }
     LCDstr(buf);
-    LCDcmd(0xc0);     
+    LCDcmd(0xc0);
     while (LCDbusy());
-    switch (position) {
-        case 4:
-            sprintf(buf, "%02d C<        L %d", parameters.ALAT, bright);
-            break;
-        case 5:
-            sprintf(buf, "%02d C        >L %d", c, parameters.ALAL);
-            break;
-        default:
-            sprintf(buf, "%02d C         L %d", c, bright);
-            break;
+    // in T and L, show the threshold being edited instead of the current reading
+    if (position == 4){
+        sprintf(buf, "%02d C         L %d", parameters.ALAT, bright);
+    }
+    else if (position == 5){
+        sprintf(buf, "%02d C         L %d", tmp, parameters.ALAL);
+    }
+    else{
+        sprintf(buf, "%02d C         L %d", tmp, bright);
     }
     LCDstr(buf);
-    
+
+    // blinking block on the selected field (has to be after writing the text)
+    LCDcmd(0x0D);
+    switch (position) {
+        case 0: LCDpos(0, 1);  break;   // hh
+        case 1: LCDpos(0, 4);  break;   // mm
+        case 2: LCDpos(0, 7);  break;   // ss
+        case 3: LCDpos(0, 10); break;   // C
+        case 4: LCDpos(1, 1);  break;   // T value
+        case 5: LCDpos(1, 15); break;   // L value
+        case 6: LCDpos(0, 14); break;   // A
+        case 7: LCDpos(0, 15); break;   // R
+    }
 }
 // interface for max min values
 void LCD_max_min(uint16_t EEAddr, uint8_t presentation_counter){

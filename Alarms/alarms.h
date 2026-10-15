@@ -14,7 +14,7 @@ extern "C" {
     
 #include "stdint.h"
 
-unsigned char alarm(unsigned char c, uint8_t bright);
+unsigned char alarm(unsigned char tmp, uint8_t bright);
 
 
 #ifdef	__cplusplus
