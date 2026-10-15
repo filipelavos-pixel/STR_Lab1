@@ -143,9 +143,8 @@ void main(void)
 
             // Detecting Alarm conditions
             if (parameters.ALAF == 1) {
-                unsigned char alarm_type = alarm(tmp, bright);
-
-                if (alarm_type != '0') {
+                // alarm() sets the C/T/L flags, returns true on a new alarm
+                if (alarm(tmp, bright)) {
                     // Start the PWM signal only if it's OFF
                     if (!enabled_D2) {
                         pwm_count = 0;
@@ -153,19 +152,6 @@ void main(void)
                         TMR2_StartTimer();
                         enabled_D2 = true;
                     }
-
-                    if (alarm_type == 'C') {
-                        alarm_clock = true;
-                    }
-
-                    if (alarm_type == 'T') {
-                        alarm_tmp = true;
-                    }
-
-                    if (alarm_type == 'L') {
-                        alarm_bright = true;
-                    }
-
                 }
 
             } else {

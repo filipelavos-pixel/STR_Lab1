@@ -13,8 +13,9 @@ extern "C" {
 #endif
     
 #include "stdint.h"
+#include "stdbool.h"
 
-unsigned char alarm(unsigned char tmp, uint8_t bright);
+bool alarm(unsigned char tmp, uint8_t bright);
 
 
 #ifdef	__cplusplus

@@ -2,23 +2,28 @@
 #include "alarms.h"
 #include "../Clock/clock.h"
 #include "stdint.h"
+#include "stdbool.h"
 #include "../Parameters_Block/parameters_block.h"
+#include "../Button/button.h"
 
-//Returns the letter that corresponds to the alarm being activated by threshold conditions, if not, returns 0
-unsigned char alarm(unsigned char tmp, uint8_t bright){
-    
-    if (parameters.CLKH >= parameters.ALAH){
-        if (parameters.CLKM >= parameters.ALAM){
-            if(CLKS >= parameters.ALAS){
-                return 'C';
-            }
-        }
+// Checks each alarm condition independently and sets its flag (C, T, L)
+// Returns true if a new alarm was raised (flag went from false to true)
+bool alarm(unsigned char tmp, uint8_t bright){
+    bool new_alarm = false;
+
+    // Clock alarm when current hours, minutes and seconds are each >= the alarm ones
+    if (!alarm_clock && parameters.CLKH >= parameters.ALAH &&
+        parameters.CLKM >= parameters.ALAM && CLKS >= parameters.ALAS){
+        alarm_clock = true;
+        new_alarm = true;
     }
-    if (tmp > parameters.ALAT){
-        return 'T';
+    if (!alarm_tmp && tmp > parameters.ALAT){
+        alarm_tmp = true;
+        new_alarm = true;
     }
-    if (bright < parameters.ALAL){
-        return 'L';
+    if (!alarm_bright && bright < parameters.ALAL){
+        alarm_bright = true;
+        new_alarm = true;
     }
-    return '0';
+    return new_alarm;
 }
