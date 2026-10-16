@@ -79,7 +79,7 @@ void main(void)
 
     // Initial State for Alarm Sinalization: OFF
     PWM6_LoadDutyValue(0);
-    TMR2_StopTimer();
+    TMR2_StartTimer();
 
     // Restore saved parameters, or use (and save) the defaults if MW/checksum fail
     if (!params_load()) {
@@ -168,7 +168,6 @@ void main(void)
                 // Here, alarms are deactivated --> ALAF = 0
                 // The sinalization has to be stopped
                 PWM6_LoadDutyValue(0);
-                TMR2_StopTimer();
                 enabled_D2 = false;
                 pwm_count = 0;
             }
@@ -176,7 +175,6 @@ void main(void)
             // PWM sinalization is stopped when the intended duration is achieved
             if(enabled_D2 && pwm_count >= parameters.TALA) {
                 PWM6_LoadDutyValue(0);
-                TMR2_StopTimer();
                 enabled_D2 = false;
                 pwm_count = 0;
             }

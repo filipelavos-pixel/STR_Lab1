@@ -5,6 +5,7 @@
 #include "../EEPROM/eeprom.h"
 #include "../Interface/interface.h"
 #include "../LCD/lcd.h"
+#include "../Sensors/sensors.h"
 
 uint8_t S1_value; 
 uint8_t S2_value;
@@ -14,15 +15,21 @@ uint8_t S2_state = 1;
 bool S2_pressed = false;
 uint8_t mode = 0;
 uint8_t cursor_pos = 0; //cursor position for changing values or not
+
 //if current true, open up changes to clock time
 // if its false, button with cursor on C was pressed, so now we can change clock alarms
 bool current = true;
 uint8_t mode_count = 0; // count the two seconds in transition mode
 uint8_t presentation_counter = 0; // count 1 second each, for printing on LCD the max min variables in right way
+
 // type of alarm, if exists or not
 bool alarm_clock = false;
 bool alarm_tmp = false;
 bool alarm_bright = false;
+
+static uint8_t last_config_second = 255;
+
+static bool editing_threshold = false;
 
 /* S_State corresponds to the last value in get_value, we have to save it and
  * create more variables like S_pressed to do things in the right way
@@ -63,6 +70,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
     if (mode == 2) {
         if (S1_pressed) {
             cursor_pos++;
+            editing_threshold = false;
         }
 
         if (S2_pressed) {
@@ -123,40 +131,76 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                     current = false;
                     break;
                 case 4:
+                    // First press: enter temperature editing without changing it.
+                    if(!editing_threshold){
+                        editing_threshold = true;
+                        break;
+                    }
+                    
+                    // Following presses: increment the temperature threshold.
                     param_change = true;
-                    current = true;
-                    if (parameters.ALAT == 50){
+
+                    if (parameters.ALAT == 50) {
                         parameters.ALAT = 0;
-                            break;
-                        }
-                    parameters.ALAT++; 
+                    } 
+
+                    else {
+                        parameters.ALAT++;
+                    }
+
                     break;
+
                 case 5:
+                    // First press: enter luminosity editing without changing it.
+                    if(!editing_threshold){
+                        editing_threshold = true;
+                        break;
+                    }
+
+                    // Following presses: increment the luminosity threshold.
                     param_change = true;
+
                     if (parameters.ALAL == 7){
                         parameters.ALAL = 0;
-                            break;
-                        }
-                    parameters.ALAL++; 
+                    }
+
+                    else {
+                        parameters.ALAL++; 
+                    }
+                     
                     break;
                 case 6:
                     param_change = true;
                     parameters.ALAF = !parameters.ALAF;
                     break;
-                case 7: 
+                case 7: {
+                    // Take a fresh sample as the new starting point.
+                    unsigned char reset_tmp = readTC74();
+                    uint8_t reset_bright = brightness();
+
+                    // Reinitialize all four records using this sample.
                     eeprom_start = 0;
+                    eeprom_record(EEAddr, reset_tmp, reset_bright);
                     break;
+                }
                 case 8:
                     break;
             }
         }
 
-        if (cursor_pos >= 8){
+        if (cursor_pos >= 8) {
             cursor_pos = 0;
             mode = 0;
-            LCDcmd(0x0C); // hide the blinking cursor when leaving configuration
-        }else{
-            configuration_interface(cursor_pos, tmp, bright, current);
+            LCDcmd(0x0C); // Hide the cursor outside configuration.
+        }
+        else {
+            uint8_t current_second = CLKS;
+
+            if (S1_pressed || S2_pressed || current_second != last_config_second) {
+
+                last_config_second = current_second;
+                configuration_interface(cursor_pos, tmp, bright, current, editing_threshold);
+            }
         }
     }
     // in possible transition of normal to configurate mode
@@ -166,6 +210,10 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
             if (S1_pressed){
                 mode = 2;
                 mode_count = 0;
+                last_config_second = 255; // forces the display to update
+                cursor_pos = 0; // makes the cursor start at the hours field
+                current = true; // makes sure the first clock we see on configuration mode is the current one
+                editing_threshold = false;
             }
         }
         else{

@@ -71,7 +71,7 @@ void switch_interface(){
     LCDstr(buf);
 }
 // interface of configuration mode
-void configuration_interface(uint8_t position, unsigned char tmp, uint8_t bright, bool current){
+void configuration_interface(uint8_t position, unsigned char tmp, uint8_t bright, bool current, bool editing_threshold) {
     
     char buf[17];
     unsigned char A;
@@ -106,19 +106,37 @@ void configuration_interface(uint8_t position, unsigned char tmp, uint8_t bright
     }
     LCDstr(buf);
 
-    // blinking block on the selected field (has to be after writing the text)
-    LCDcmd(0x0D);
+    // Underline cursor on the selected field.
+    LCDcmd(0x0E);
     switch (position) {
         case 0: LCDpos(0, 1);  break;   // hh
         case 1: LCDpos(0, 4);  break;   // mm
         case 2: LCDpos(0, 7);  break;   // ss
         case 3: LCDpos(0, 10); break;   // C
-        case 4: LCDpos(1, 1);  break;   // T value
-        case 5: LCDpos(1, 15); break;   // L value
+        
+        case 4: 
+            if (editing_threshold) {
+                LCDpos(1, 1);   // Temperature value.
+            }
+            else {
+                LCDpos(0, 11);  // Letter T.
+            }
+            break;
+
+        case 5: 
+            if (editing_threshold) {
+                LCDpos(1, 15);  // Luminosity value.
+            }
+            else {
+                LCDpos(0, 12);  // Letter L.
+            }
+            break;
+
         case 6: LCDpos(0, 14); break;   // A
         case 7: LCDpos(0, 15); break;   // R
     }
 }
+
 // interface for max min values
 void LCD_max_min(uint16_t EEAddr, uint8_t presentation_counter){
     
