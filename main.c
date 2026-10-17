@@ -76,7 +76,14 @@ void main(void)
     
     // initialize the device
     SYSTEM_Initialize();
-
+    
+    IOCBPbits.IOCBP4 = 1;   // S1 released (rising edge)
+    IOCBNbits.IOCBN4 = 1;   // S1 pressed (falling edge)
+    IOCCPbits.IOCCP5 = 1;   // S2 released
+    IOCCNbits.IOCCN5 = 1;   // S2 pressed
+    IOCBFbits.IOCBF4 = 0;   //change to 1 when button is changed
+    IOCCFbits.IOCCF5 = 0;   //change to 1 when button is changed
+    
     // Initial State for Alarm Sinalization: OFF
     PWM6_LoadDutyValue(0);
     TMR2_StartTimer();
@@ -201,7 +208,19 @@ void main(void)
                 
             }
         }
-            
+        
+        
+        INTERRUPT_GlobalInterruptDisable(); //stops the jumps caused by the Timer 1 but the flag still changes so the clock will be updated when this gets enabled again
+        if (!tick_1s && !param_change && !enabled_D2) {
+            PIE0bits.IOCIE = 1; //turn on the wakeup with the buttons 
+            SLEEP();
+            NOP(); //after sleep continues here and the NOP was recommened in the datasheet
+            PIE0bits.IOCIE = 0; //turn off the wakeup with the buttons 
+        }
+        //reset the button press flags
+        IOCBFbits.IOCBF4 = 0; 
+        IOCCFbits.IOCCF5 = 0;
+        INTERRUPT_GlobalInterruptEnable();  
     }
 }
 
