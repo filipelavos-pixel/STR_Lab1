@@ -13,7 +13,9 @@ extern "C" {
 #endif
     
 #include "stdint.h"
+#include "stdbool.h"
 
+void TC74_standby(bool on);
 unsigned char readTC74 (void);
 uint8_t brightness(void);
 

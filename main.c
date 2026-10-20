@@ -173,7 +173,11 @@ void main(void)
             } else {
                 // Here, alarms are deactivated --> ALAF = 0
                 // The sinalization has to be stopped
-                PWM6_LoadDutyValue(0);
+                if (enabled_D2) {
+                    PWM6_LoadDutyValue(0);
+                    PIR4bits.TMR2IF = 0;
+                    while (!TMR2_HasOverflowOccured());   // wait for the period end so duty 0 is applied before SLEEP
+                }
                 enabled_D2 = false;
                 pwm_count = 0;
             }
@@ -181,6 +185,8 @@ void main(void)
             // PWM sinalization is stopped when the intended duration is achieved
             if(enabled_D2 && pwm_count >= parameters.TALA) {
                 PWM6_LoadDutyValue(0);
+                PIR4bits.TMR2IF = 0;
+                while (!TMR2_HasOverflowOccured());   // wait for the period end so duty 0 is applied before SLEEP
                 enabled_D2 = false;
                 pwm_count = 0;
             }
@@ -203,6 +209,11 @@ void main(void)
             // Periodic monitoring is disabled when PMON is zero.
             if (parameters.PMON > 0) {
                 pmon++;
+
+                // Wake the TC74 one tick before the reading, so it is ready
+                if (pmon == parameters.PMON - 1) {
+                    TC74_standby(false);
+                }
 
                 if (pmon >= parameters.PMON) {
                     tmp = readTC74();
