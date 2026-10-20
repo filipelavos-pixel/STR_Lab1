@@ -120,6 +120,7 @@ void main(void)
     LCDcmd(0x0C);       // display on, cursor off (LCDinit leaves it on)
     //clock initialized, and PWM
     TMR1_SetInterruptHandler(clock_isr);
+    TMR4_SetInterruptHandler(debounce_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
     
@@ -131,8 +132,16 @@ void main(void)
     
     while (1)
     {   
-        //Button user interactions and its effects
-        button_control(EEAddr, tmp, bright);
+        // A button changed: (re)start the debounce
+        if (IOCBFbits.IOCBF4 || IOCCFbits.IOCCF5) {
+            IOCBFbits.IOCBF4 = 0;
+            IOCCFbits.IOCCF5 = 0;
+            debounce_start();
+        }
+        //Button user interactions and its effects (only read when stable)
+        if (!debouncing) {
+            button_control(EEAddr, tmp, bright);
+        }
         // Save the parameters block when something changed
         if (param_change) {
             param_change = false;
@@ -229,16 +238,15 @@ void main(void)
         
         
         INTERRUPT_GlobalInterruptDisable(); //stops the jumps caused by the Timer 1 but the flag still changes so the clock will be updated when this gets enabled again
-        if (!tick_1s && !param_change && !enabled_D2) {
-            PIE0bits.IOCIE = 1; //turn on the wakeup with the buttons 
+        // No sleep while debouncing: TMR4 (Fosc/4) stops in sleep
+        if (!tick_1s && !param_change && !enabled_D2 && !debouncing) {
+            PIE0bits.IOCIE = 1; //turn on the wakeup with the buttons
             SLEEP();
             NOP(); //after sleep continues here and the NOP was recommened in the datasheet
-            PIE0bits.IOCIE = 0; //turn off the wakeup with the buttons 
+            PIE0bits.IOCIE = 0; //turn off the wakeup with the buttons
         }
-        //reset the button press flags
-        IOCBFbits.IOCBF4 = 0; 
-        IOCCFbits.IOCCF5 = 0;
-        INTERRUPT_GlobalInterruptEnable();  
+        // The IOC flags are only cleared at the top of the loop, where the debounce starts
+        INTERRUPT_GlobalInterruptEnable();
     }
 }
 

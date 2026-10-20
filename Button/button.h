@@ -19,8 +19,11 @@ extern "C" {
     extern bool alarm_clock;
     extern bool alarm_tmp;
     extern bool alarm_bright;
-    
+    extern volatile bool debouncing;
+
     void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright);
+    void debounce_start(void);
+    void debounce_isr(void);
 
 
 #ifdef	__cplusplus

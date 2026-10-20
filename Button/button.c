@@ -31,6 +31,28 @@ static uint8_t last_config_second = 255;
 
 static bool editing_threshold = false;
 
+volatile bool debouncing = false;
+static volatile uint8_t debounce_ticks;
+
+// Starts (or restarts) the debounce: 2 TMR4 periods = ~20 ms
+void debounce_start(void) {
+    TMR4_StopTimer();
+    TMR4_WriteTimer(0);
+    PIR4bits.TMR4IF = 0;
+    debounce_ticks = 2;
+    debouncing = true;
+    TMR4_StartTimer();
+}
+
+// TMR4 handler (every ~10 ms while debouncing)
+void debounce_isr(void) {
+    debounce_ticks--;
+    if (debounce_ticks == 0) {
+        TMR4_StopTimer();
+        debouncing = false;
+    }
+}
+
 /* S_State corresponds to the last value in get_value, we have to save it and
  * create more variables like S_pressed to do things in the right way
  * the while (1) makes this fucntion always go on loop in every microseconds
