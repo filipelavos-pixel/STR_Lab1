@@ -20,6 +20,7 @@
         <itemPath>mcc_generated_files/memory.h</itemPath>
         <itemPath>mcc_generated_files/pwm6.h</itemPath>
         <itemPath>mcc_generated_files/tmr2.h</itemPath>
+        <itemPath>mcc_generated_files/tmr4.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -79,6 +80,7 @@
         <itemPath>mcc_generated_files/memory.c</itemPath>
         <itemPath>mcc_generated_files/tmr2.c</itemPath>
         <itemPath>mcc_generated_files/pwm6.c</itemPath>
+        <itemPath>mcc_generated_files/tmr4.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Parameters_Block" projectFiles="true">
         <itemPath>Parameters_Block/parameters_block.c</itemPath>
