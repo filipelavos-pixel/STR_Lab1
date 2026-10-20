@@ -11,9 +11,12 @@
 bool alarm(unsigned char tmp, uint8_t bright){
     bool new_alarm = false;
 
-    // Clock alarm when current hours, minutes and seconds are each >= the alarm ones
-    if (!alarm_clock && parameters.CLKH >= parameters.ALAH &&
-        parameters.CLKM >= parameters.ALAM && CLKS >= parameters.ALAS){
+    // Raise the clock alarm at the configured time.
+    if (!alarm_clock &&
+        parameters.CLKH == parameters.ALAH &&
+        parameters.CLKM == parameters.ALAM &&
+        CLKS == parameters.ALAS) {
+
         alarm_clock = true;
         new_alarm = true;
     }

@@ -143,7 +143,6 @@ void main(void)
             tick_1s = false; 
             LED_D5_Toggle();
             
-            pmon++;
             
             //all real time conditions(see button.c properly)
             if (mode == 1){
@@ -199,13 +198,21 @@ void main(void)
             else{
                 LED_D3_SetLow();
             }
-            //Reading temperature and brightness every PMON seconds
-            if (pmon >= parameters.PMON){
-                tmp = readTC74();
-                bright = brightness();
-                eeprom_record(EEAddr, tmp, bright);
+            
+            //Reading temperature and brightness every PMON seconds (should be disabled when PMON is zero)
+            // Periodic monitoring is disabled when PMON is zero.
+            if (parameters.PMON > 0) {
+                pmon++;
+
+                if (pmon >= parameters.PMON) {
+                    tmp = readTC74();
+                    bright = brightness();
+                    eeprom_record(EEAddr, tmp, bright);
+                    pmon = 0;
+                }
+            }
+            else {
                 pmon = 0;
-                
             }
         }
         

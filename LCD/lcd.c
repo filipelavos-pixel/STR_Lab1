@@ -3,7 +3,7 @@ LCD
 */
 
 #include <xc.h>
-#define _XTAL_FREQ 4000000
+#include "../mcc_generated_files/device_config.h"
 
 #include "../I2C/i2c.h"
 #include "lcd.h"

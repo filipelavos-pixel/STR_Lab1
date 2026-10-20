@@ -69,8 +69,16 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
     // in configuration mode state (all modes are related to a interface function)
     if (mode == 2) {
         if (S1_pressed) {
-            cursor_pos++;
             editing_threshold = false;
+
+            if (cursor_pos == 2 && !current) {
+                // Finish clock-alarm editing and continue to T (temperature alarm)
+                cursor_pos = 4;
+                current = true;
+            }
+            else {
+                cursor_pos++;
+            }
         }
 
         if (S2_pressed) {
@@ -174,7 +182,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
                     parameters.ALAF = !parameters.ALAF;
                     break;
                 case 7: {
-                    // Take a fresh sample as the new starting point.
+                    // Take a new sample of temperature and luminosity data as the new starting point.
                     unsigned char reset_tmp = readTC74();
                     uint8_t reset_bright = brightness();
 
