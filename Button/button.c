@@ -55,7 +55,7 @@ void debounce_isr(void) {
 
 /* S_State corresponds to the last value in get_value, we have to save it and
  * create more variables like S_pressed to do things in the right way
- * the while (1) makes this fucntion always go on loop in every microseconds
+ * the while (1) makes this function always go on loop in every microseconds
  * so if we press just one time the button, if we press more than the time
  * of one cycle, the program thinks we pressed a button more than on time
  * causing problems in the code, so we save the last value in S_state, and if

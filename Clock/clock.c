@@ -7,6 +7,7 @@
 volatile uint8_t CLKS = 0;
 volatile bool tick_1s = false;
 
+//function that calculates the clock time
     void clock_isr(void) {
         CLKS++;
         if (CLKS >= 60) { 

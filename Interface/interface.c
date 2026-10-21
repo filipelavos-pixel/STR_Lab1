@@ -82,7 +82,7 @@ void configuration_interface(uint8_t position, unsigned char tmp, uint8_t bright
         A = 'A';
     }
     
-    LCDcmd(0x80);        // Primeira linha, primeira coluna
+    LCDcmd(0x80);     
     while (LCDbusy());
     // positions 0-2 show the clock or the alarm (current), C shows the alarm, the rest show the clock
     if ((position <= 2 && !current) || position == 3){

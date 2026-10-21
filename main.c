@@ -84,7 +84,7 @@ void main(void)
     IOCBFbits.IOCBF4 = 0;   //change to 1 when button is changed
     IOCCFbits.IOCCF5 = 0;   //change to 1 when button is changed
     
-    // Initial State for Alarm Sinalization: OFF
+    // Initial State for Alarm Signalization: OFF
     PWM6_LoadDutyValue(0);
     TMR2_StartTimer();
 
@@ -94,36 +94,18 @@ void main(void)
         params_save();
     }
 
-
-    // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
-    // Use the following macros to:
-
-    // Enable the Global Interrupts
-    
-    //INTERRUPT_GlobalInterruptEnable();
-
-    // Enable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptEnable();
-
-    // Disable the Global Interrupts
-    //INTERRUPT_GlobalInterruptDisable();
-
-    // Disable the Peripheral Interrupts
-    //INTERRUPT_PeripheralInterruptDisable();
-
     OpenI2C();
-    //I2C_SCL = 1;
-    //I2C_SDA = 1;
-    //WPUC3 = 1;
-    //WPUC4 = 1;
+
     LCDinit();
     LCDcmd(0x0C);       // display on, cursor off (LCDinit leaves it on)
     //clock initialized, and PWM
     TMR1_SetInterruptHandler(clock_isr);
     TMR4_SetInterruptHandler(debounce_isr);
+     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
    
+    //if eeprom does not have values of parameters stored, record values for the first time
     if (DATAEE_ReadByte(EEAddr) == 0xFF && DATAEE_ReadByte(EEAddr + 1) == 0xFF) {
         tmp = readTC74();
         bright = brightness();
@@ -182,7 +164,7 @@ void main(void)
 
             } else {
                 // Here, alarms are deactivated --> ALAF = 0
-                // The sinalization has to be stopped
+                // The signalization has to be stopped
                 if (enabled_D2) {
                     PWM6_LoadDutyValue(0);
                     PIR4bits.TMR2IF = 0;
@@ -192,7 +174,7 @@ void main(void)
                 pwm_count = 0;
             }
 
-            // PWM sinalization is stopped when the intended duration is achieved
+            // PWM signalization is stopped when the intended duration is achieved
             if(enabled_D2 && pwm_count >= parameters.TALA) {
                 PWM6_LoadDutyValue(0);
                 PIR4bits.TMR2IF = 0;
@@ -239,11 +221,11 @@ void main(void)
         
         
         INTERRUPT_GlobalInterruptDisable(); //stops the jumps caused by the Timer 1 but the flag still changes so the clock will be updated when this gets enabled again
-        // No sleep while debouncing: TMR4 (Fosc/4) stops in sleep
+        // No sleep while debouncing: TMR4 (FOSC/4) stops in sleep
         if (!tick_1s && !param_change && !enabled_D2 && !debouncing) {
             PIE0bits.IOCIE = 1; //turn on the wakeup with the buttons
             SLEEP();
-            NOP(); //after sleep continues here and the NOP was recommened in the datasheet
+            NOP(); //after sleep continues here and the NOP was recommended in the datasheet
             PIE0bits.IOCIE = 0; //turn off the wakeup with the buttons
         }
         // The IOC flags are only cleared at the top of the loop, where the debounce starts
