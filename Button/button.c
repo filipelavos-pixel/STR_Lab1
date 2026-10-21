@@ -249,6 +249,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
         else{
             mode_count = 0;
             mode = 0;
+            normal_interface(tmp, bright, alarm_clock, alarm_tmp, alarm_bright);
         }
 
     }
@@ -272,6 +273,7 @@ void button_control(uint16_t EEAddr, unsigned char tmp, uint8_t bright){
         if (presentation_counter >= 2){
             presentation_counter = 0;
             mode = 0;
+            normal_interface(tmp, bright, alarm_clock, alarm_tmp, alarm_bright);
         }
     }
 }
