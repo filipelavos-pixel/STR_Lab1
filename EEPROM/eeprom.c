@@ -9,7 +9,7 @@ unsigned char temperature_max;
 unsigned char temperature_min;
 uint8_t bright_max;
 uint8_t bright_min;
-uint8_t eeprom_start = 0;
+uint8_t eeprom_start = 1;
 
 //Record values of temperature and brightness in memory
 void eeprom_record(uint16_t EEAddr, unsigned char tmp, uint8_t bright) {

@@ -89,6 +89,7 @@ void main(void)
     PWM6_LoadDutyValue(0);
     TMR2_StartTimer();
     usart_init();
+   
 
     // Restore saved parameters, or use (and save) the defaults if MW/checksum fail
     if (!params_load()) {
@@ -125,12 +126,13 @@ void main(void)
     TMR4_SetInterruptHandler(debounce_isr);
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
-    
-    //Readings for inicial record
-    tmp = readTC74();
-    bright = brightness();
-    eeprom_record(EEAddr, tmp, bright);
-    
+   
+    if (DATAEE_ReadByte(EEAddr) == 0xFF && DATAEE_ReadByte(EEAddr + 1) == 0xFF) {
+        tmp = readTC74();
+        bright = brightness();
+        eeprom_start = 0;
+        eeprom_record(EEAddr, tmp, bright);
+    }
     
     while (1)
     {   
