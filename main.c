@@ -54,7 +54,6 @@
 #include "Parameters_Block/parameters_block.h"
 #include "Interface/interface.h"
 #include "Button/button.h"
-#include "USART/usart.h"
 
 
 // Max/min records go right after the parameters block
@@ -88,8 +87,6 @@ void main(void)
     // Initial State for Alarm Sinalization: OFF
     PWM6_LoadDutyValue(0);
     TMR2_StartTimer();
-    usart_init();
-   
 
     // Restore saved parameters, or use (and save) the defaults if MW/checksum fail
     if (!params_load()) {
@@ -136,7 +133,6 @@ void main(void)
     
     while (1)
     {   
-        usart_task();
         // A button changed: (re)start the debounce
         if (IOCBFbits.IOCBF4 || IOCCFbits.IOCCF5) {
             IOCBFbits.IOCBF4 = 0;
@@ -244,7 +240,7 @@ void main(void)
         
         INTERRUPT_GlobalInterruptDisable(); //stops the jumps caused by the Timer 1 but the flag still changes so the clock will be updated when this gets enabled again
         // No sleep while debouncing: TMR4 (Fosc/4) stops in sleep
-        if (!tick_1s && !param_change && !enabled_D2 && !debouncing && !usart_tx_busy()) {
+        if (!tick_1s && !param_change && !enabled_D2 && !debouncing) {
             PIE0bits.IOCIE = 1; //turn on the wakeup with the buttons
             SLEEP();
             NOP(); //after sleep continues here and the NOP was recommened in the datasheet
