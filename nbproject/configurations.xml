@@ -21,6 +21,7 @@
         <itemPath>mcc_generated_files/pwm6.h</itemPath>
         <itemPath>mcc_generated_files/tmr2.h</itemPath>
         <itemPath>mcc_generated_files/tmr4.h</itemPath>
+        <itemPath>mcc_generated_files/eusart.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -81,6 +82,7 @@
         <itemPath>mcc_generated_files/tmr2.c</itemPath>
         <itemPath>mcc_generated_files/pwm6.c</itemPath>
         <itemPath>mcc_generated_files/tmr4.c</itemPath>
+        <itemPath>mcc_generated_files/eusart.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Parameters_Block" projectFiles="true">
         <itemPath>Parameters_Block/parameters_block.c</itemPath>
@@ -89,6 +91,10 @@
       <logicalFolder name="f2" displayName="Sensors" projectFiles="true">
         <itemPath>Sensors/sensors.c</itemPath>
         <itemPath>Sensors/sensors.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8" displayName="USART" projectFiles="true">
+        <itemPath>USART/usart.c</itemPath>
+        <itemPath>USART/usart.h</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>

@@ -58,6 +58,7 @@ void SYSTEM_Initialize(void)
     TMR4_Initialize();
     TMR2_Initialize();
     TMR1_Initialize();
+    EUSART_Initialize();
 }
 
 void OSCILLATOR_Initialize(void)
