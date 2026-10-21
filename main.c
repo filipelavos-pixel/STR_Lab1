@@ -70,8 +70,8 @@ void main(void)
 {    
     unsigned char tmp;
     uint8_t bright;
-    unsigned char pmon = 0; //Counter for PMON duration
-    unsigned char pwm_count = 0; //Counter for PWM duration
+    unsigned char pmon = 0; // Seconds since the last sensor reading
+    unsigned char pwm_count = 0; // Seconds since the PWM was activated
     bool enabled_D2 = false;
     
     // initialize the device
@@ -81,10 +81,12 @@ void main(void)
     IOCBNbits.IOCBN4 = 1;   // S1 pressed (falling edge)
     IOCCPbits.IOCCP5 = 1;   // S2 released
     IOCCNbits.IOCCN5 = 1;   // S2 pressed
-    IOCBFbits.IOCBF4 = 0;   //change to 1 when button is changed
-    IOCCFbits.IOCCF5 = 0;   //change to 1 when button is changed
     
-    // Initial State for Alarm Signalization: OFF
+    // Clear any pending button flags
+    IOCBFbits.IOCBF4 = 0; 
+    IOCCFbits.IOCCF5 = 0;
+    
+    // Start with the PWM off, but keep Timer2 running
     PWM6_LoadDutyValue(0);
     TMR2_StartTimer();
 
@@ -98,14 +100,16 @@ void main(void)
 
     LCDinit();
     LCDcmd(0x0C);       // display on, cursor off (LCDinit leaves it on)
-    //clock initialized, and PWM
+    
+    // Set the interrupt handlers for the clock and debounce
     TMR1_SetInterruptHandler(clock_isr);
     TMR4_SetInterruptHandler(debounce_isr);
-     // When using interrupts, you need to set the Global and Peripheral Interrupt Enable bits
+    
+    // Enable interrupts after setting up the handlers
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
    
-    // Read initial sensor values
+    // Read both sensors at startup, even if records are already saved
     tmp = readTC74();
     bright = brightness();
 
@@ -118,7 +122,7 @@ void main(void)
 
     } else {
 
-        // Restore previous max/min values from EEPROM
+        // Restore the saved extremes so future readings use the correct values
         temperature_max = DATAEE_ReadByte(EEAddr + 3);
         temperature_min = DATAEE_ReadByte(EEAddr + 8);
         bright_max = DATAEE_ReadByte(EEAddr + 14);
@@ -144,13 +148,13 @@ void main(void)
             param_change = false;
             params_save();
         }
-        // After each 1 second, everything down runs
+        // Handle the tasks that run every second
         if (tick_1s) { 
             tick_1s = false; 
             LED_D5_Toggle();
             
             
-            //all real time conditions(see button.c properly)
+            // Update the timers used by the interface
             if (mode == 1){
                 mode_count++;
             }
@@ -158,12 +162,12 @@ void main(void)
                 presentation_counter++;
             }
 
-            // Increments the time passed on an active PWM signal for the D2 LED
+            // Count how long the PWM has been active
             if (enabled_D2) {
                 pwm_count++;
             }
 
-            // Detecting Alarm conditions
+            // Check if a new alarm has been triggered
             if (parameters.ALAF == 1) {
                 // alarm() sets the C/T/L flags, returns true on a new alarm
                 if (alarm(tmp, bright)) {
@@ -177,27 +181,26 @@ void main(void)
                 }
 
             } else {
-                // Here, alarms are deactivated --> ALAF = 0
-                // The signalization has to be stopped
+                // Turn off the PWM if alarms are disabled
                 if (enabled_D2) {
                     PWM6_LoadDutyValue(0);
                     PIR4bits.TMR2IF = 0;
-                    while (!TMR2_HasOverflowOccured());   // wait for the period end so duty 0 is applied before SLEEP
+                    while (!TMR2_HasOverflowOccured());   // Wait for the new duty cycle to take effect before sleeping
                 }
                 enabled_D2 = false;
                 pwm_count = 0;
             }
 
-            // PWM signalization is stopped when the intended duration is achieved
+            // Stop the PWM once TALA seconds have passed
             if(enabled_D2 && pwm_count >= parameters.TALA) {
                 PWM6_LoadDutyValue(0);
                 PIR4bits.TMR2IF = 0;
-                while (!TMR2_HasOverflowOccured());   // wait for the period end so duty 0 is applied before SLEEP
+                while (!TMR2_HasOverflowOccured());   // Wait for the new duty cycle to take effect before sleeping
                 enabled_D2 = false;
                 pwm_count = 0;
             }
 
-            //Light up two LEDS for reach threshold limits
+            // Update the LEDs according to the current sensor values
             if (tmp > parameters.ALAT){
                 LED_D4_SetHigh();
             }
