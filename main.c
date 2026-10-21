@@ -105,12 +105,26 @@ void main(void)
     INTERRUPT_GlobalInterruptEnable();
     INTERRUPT_PeripheralInterruptEnable();
    
-    //if eeprom does not have values of parameters stored, record values for the first time
-    if (DATAEE_ReadByte(EEAddr) == 0xFF && DATAEE_ReadByte(EEAddr + 1) == 0xFF) {
-        tmp = readTC74();
-        bright = brightness();
+    // Read initial sensor values
+    tmp = readTC74();
+    bright = brightness();
+
+    // Initialize records if EEPROM is empty
+    if (DATAEE_ReadByte(EEAddr) == 0xFF &&
+        DATAEE_ReadByte(EEAddr + 1) == 0xFF) {
+
         eeprom_start = 0;
         eeprom_record(EEAddr, tmp, bright);
+
+    } else {
+
+        // Restore previous max/min values from EEPROM
+        temperature_max = DATAEE_ReadByte(EEAddr + 3);
+        temperature_min = DATAEE_ReadByte(EEAddr + 8);
+        bright_max = DATAEE_ReadByte(EEAddr + 14);
+        bright_min = DATAEE_ReadByte(EEAddr + 19);
+
+        eeprom_start = 1;
     }
     
     while (1)
